@@ -1,12 +1,12 @@
 
 CREATE TABLE `country` (
-  `countryid` bigint(255) NOT NULL auto_increment,
-  `countryname` varchar(255) default NULL,
-  `state_name` varchar(100) NOT NULL default 'No',
-  PRIMARY KEY  (`countryid`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
-
-CREATE TABLE `user` (
-    `id` bigint(255) NOT NULL auto_increment,
-    ``
-)
+  `state_pk` INT AUTO_INCREMENT PRIMARY KEY,
+  `is_active` BOOLEAN DEFAULT true,
+  `createdon` TIMESTAMP DEFAULT current_timestamp,
+  `updatedon` TIMESTAMP DEFAULT NULL,
+  `deletedon` TIMESTAMP DEFAULT NULL,
+  `createdby` INT,
+  `updatedby` INT DEFAULT NULL,
+  `deletedby` INT DEFAULT NULL,
+  `state_name` VARCHAR(100) NOT NULL
+);
