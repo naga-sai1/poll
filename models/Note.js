@@ -1,0 +1,20 @@
+module.exports = (sequelize, DataTypes) => {
+  return sequelize.define(
+    "Note",
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      title: DataTypes.STRING,
+      description: DataTypes.STRING,
+    },
+
+    {
+      tableName: "notes",
+      engine: "InnoDB",
+      timestamps: false,
+    }
+  );
+};
