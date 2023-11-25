@@ -1,6 +1,13 @@
 const Sequelize = require('sequelize');
 //const NoteModel = require('../models/Note');
 const CountryModel = require('../models/country');
+const AccessPermissionsModel = require('../models/access_permissions');
+const BoothsModel = require('../models/booths');
+const StatesModel = require('../models/states');
+const ConstituenciesModel = require('../models/constituencies');
+const DesignationModel = require('../models/designation');
+const DistrictsModel = require('../models/districts');
+const DivisionsModel = require('../models/divisions');
 
 const sequelize = new Sequelize('u276789778_polling_survey', 'u276789778_polling_survey', '123@Mango', {
 	dialect: 'mysql',
@@ -10,9 +17,16 @@ const sequelize = new Sequelize('u276789778_polling_survey', 'u276789778_polling
 
 //const Note = NoteModel(sequelize, Sequelize);
 const Country = CountryModel(sequelize, Sequelize);
+const Access_permissions = AccessPermissionsModel(sequelize, Sequelize);
+const Booths = BoothsModel(sequelize, Sequelize);
+const States = StatesModel(sequelize, Sequelize);
+const Constituencies = ConstituenciesModel(sequelize, Sequelize);
+const Designation = DesignationModel(sequelize, Sequelize);
+const Districts = DistrictsModel(sequelize, Sequelize);
+const Divisions = DivisionsModel(sequelize, Sequelize);
 
 
-const Models = { Country};
+const Models = { Country, Access_permissions, States, Booths, Constituencies, Designation, Districts, Divisions};
 const connection = {};
 
 module.exports = async () => {

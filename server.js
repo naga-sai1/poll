@@ -6,7 +6,13 @@ const cors = require('cors');
 const connectToDatabase = require('./misc/db');
 //const noteRouter = require('./routes/note.route.js');
 const conyterRouter = require('./routes/country.route.js');
-
+const constituenciesRouter = require('./routes/constituencies.route.js');
+const designationRouter = require('./routes/designation.route.js');
+const districtsRouter = require('./routes/districts.route.js');
+const divisionsRouter = require('./routes/divisions.route.js');
+const statesRouter = require('./routes/states.route.js');
+const boothsRouter = require('./routes/booths.route.js');
+const access_permisionRouter = require('./routes/access_permissions.route.js');
 
 const { join } = require('path');
 
@@ -43,7 +49,13 @@ app.use(express.json());
 
 //app.use(noteRouter);
 app.use(conyterRouter);
-
+app.use(statesRouter);
+app.use(boothsRouter);
+app.use(access_permisionRouter);
+app.use(constituenciesRouter);
+app.use(designationRouter);
+app.use(districtsRouter);
+app.use(divisionsRouter);
 
 app.get('/', async (req, res) => {
 	try {
