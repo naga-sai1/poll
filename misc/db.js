@@ -8,6 +8,9 @@ const ConstituenciesModel = require('../models/constituencies');
 const DesignationModel = require('../models/designation');
 const DistrictsModel = require('../models/districts');
 const DivisionsModel = require('../models/divisions');
+const LookupModel = require('../models/lookup');
+const MandalsModel = require('../models/mandals');
+const NavaratnaluModel = require('../models/navaratnalu');
 
 const sequelize = new Sequelize('u276789778_polling_survey', 'u276789778_polling_survey', '123@Mango', {
 	dialect: 'mysql',
@@ -24,9 +27,12 @@ const Constituencies = ConstituenciesModel(sequelize, Sequelize);
 const Designation = DesignationModel(sequelize, Sequelize);
 const Districts = DistrictsModel(sequelize, Sequelize);
 const Divisions = DivisionsModel(sequelize, Sequelize);
+const Lookup = LookupModel(sequelize, Sequelize);
+const Mandals = MandalsModel(sequelize, Sequelize);
+const Navaratnalu = NavaratnaluModel(sequelize, Sequelize);
 
 
-const Models = { Country, Access_permissions, States, Booths, Constituencies, Designation, Districts, Divisions};
+const Models = { Country, Access_permissions, States, Booths, Constituencies, Designation, Districts, Divisions, Lookup, Mandals, Navaratnalu};
 const connection = {};
 
 module.exports = async () => {
