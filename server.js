@@ -12,6 +12,9 @@ const districtsRouter = require('./routes/districts.route.js');
 const divisionsRouter = require('./routes/divisions.route.js');
 const lookupRouter = require('./routes/lookup.route.js');
 const mandalsRouter = require('./routes/mandals.route.js');
+const navaratnaluRouter = require('./routes/navaratnalu.route.js');
+const Page_accessRouter = require('./routes/page_access.route.js');
+const PartsRouter = require('./routes/parts.route.js');
 const statesRouter = require('./routes/states.route.js');
 const boothsRouter = require('./routes/booths.route.js');
 const access_permisionRouter = require('./routes/access_permissions.route.js');
@@ -60,6 +63,9 @@ app.use(districtsRouter);
 app.use(divisionsRouter);
 app.use(lookupRouter);
 app.use(mandalsRouter);
+app.use(navaratnaluRouter);
+app.use(Page_accessRouter);
+app.use(PartsRouter);
 
 app.get('/', async (req, res) => {
 	try {
