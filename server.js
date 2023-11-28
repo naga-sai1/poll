@@ -18,6 +18,14 @@ const PartsRouter = require('./routes/parts.route.js');
 const statesRouter = require('./routes/states.route.js');
 const boothsRouter = require('./routes/booths.route.js');
 const access_permisionRouter = require('./routes/access_permissions.route.js');
+const poll_surveyRouter = require('./routes/poll_survey.route.js');
+const sachivalayamRouter = require('./routes/sachivalayam.route.js');
+const ticket_attachmentsRouter = require('./routes/ticket_attachments.route.js');
+const ticket_escalationRouter = require('./routes/ticket_escalation.route.js');
+const ticket_masterRouter = require('./routes/ticket_master.route.js');
+const userRouter = require('./routes/users.route.js');
+const villageRouter = require('./routes/villages.route.js');
+const votersRouter = require('./routes/voters.route.js');
 
 const { join } = require('path');
 
@@ -66,6 +74,14 @@ app.use(mandalsRouter);
 app.use(navaratnaluRouter);
 app.use(Page_accessRouter);
 app.use(PartsRouter);
+app.use(poll_surveyRouter);
+app.use(sachivalayamRouter);
+app.use(ticket_attachmentsRouter);
+app.use(ticket_escalationRouter);
+app.use(ticket_masterRouter);
+app.use(userRouter);
+app.use(villageRouter);
+app.use(votersRouter);
 
 app.get('/', async (req, res) => {
 	try {

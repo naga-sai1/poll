@@ -13,6 +13,14 @@ const MandalsModel = require('../models/mandals');
 const NavaratnaluModel = require('../models/navaratnalu');
 const PageAccessModel = require('../models/page_access');
 const PartsModel = require('../models/parts');
+const Poll_surveyModel = require('../models/poll_survey');
+const SachivalayamModel = require('../models/sachivalayam');
+const Ticket_attachmentsModel = require('../models/ticket_attachments');
+const Ticket_escalatiionModel = require('../models/ticket_escalation');
+const Ticket_masterModel = require('../models/ticket_master');
+const UsersModel = require('../models/users');
+const VillagesModel = require('../models/villages');
+const VotersModel = require('../models/voters');
 
 const sequelize = new Sequelize('u276789778_polling_survey', 'u276789778_polling_survey', '123@Mango', {
 	dialect: 'mysql',
@@ -33,10 +41,17 @@ const Lookup = LookupModel(sequelize, Sequelize);
 const Mandals = MandalsModel(sequelize, Sequelize);
 const Navaratnalu = NavaratnaluModel(sequelize, Sequelize);
 const Page_access = PageAccessModel(sequelize, Sequelize);
-const Parts = PageAccessModel(sequelize, Sequelize);
+const Parts = PartsModel(sequelize, Sequelize);
+const Poll_survey = Poll_surveyModel(sequelize, Sequelize);
+const Sachivalayam = SachivalayamModel(sequelize, Sequelize);
+const Ticket_attachments = Ticket_attachmentsModel(sequelize, Sequelize);
+const Ticket_escalation = Ticket_escalatiionModel(sequelize, Sequelize);
+const Ticket_master = Ticket_masterModel(sequelize, Sequelize);
+const Users = UsersModel(sequelize, Sequelize);
+const Villages = VillagesModel(sequelize, Sequelize);
+const Voters = VotersModel(sequelize, Sequelize);
 
-
-const Models = { Country, Access_permissions, States, Booths, Constituencies, Designation, Districts, Divisions, Lookup, Mandals, Navaratnalu, Page_access, Parts};
+const Models = { Country, Access_permissions, States, Booths, Constituencies, Designation, Districts, Divisions, Lookup, Mandals, Navaratnalu, Page_access, Parts, Poll_survey, Sachivalayam, Ticket_attachments, Ticket_escalation, Ticket_master, Users, Villages, Voters};
 const connection = {};
 
 module.exports = async () => {
