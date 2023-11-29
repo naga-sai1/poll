@@ -26,7 +26,7 @@ async function getAll(req, res) {
     }
 }
 
-//get all divisions
+//get all by id divisions
 async function getAllById(req, res) {
     try {
         // Retrieve all divisions using the Sequelize model
@@ -87,8 +87,8 @@ async function updateById(req, res) {
   module.exports = {
     getById,
     getAll,
+    getAllById,
     create,
     updateById,
     deletedById,
-    getAllById,
   };

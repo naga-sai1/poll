@@ -76,7 +76,7 @@ async function updateById(req, res) {
     
     try {
       const { Users} = await connectToDatabase();
-      const data = await Users.findByPk(req.params.id);
+      const data = await Users.findOne({where :{phone_no: req.params.phone_no, password: req.params.password}});
       if (!data){
         return res.status(401).json({message: 'Invalid credentials'});
       }

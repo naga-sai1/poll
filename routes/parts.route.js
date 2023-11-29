@@ -3,6 +3,7 @@ const controller = require("../controllers/parts.controller.js");
 const router = express.Router();
 router.get("/parts/getall", controller.getAll);
 router.get("/parts/:id", controller.getById);
+router.get("/parts-get-by-id/:id", controller.getAllById);
 router.post("/parts/", controller.create);
 router.put("/parts/:id", controller.updateById);
 router.delete("/parts/:id", controller.deletedById);

@@ -34,29 +34,31 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 console.log('Project path :' + __dirname);
 app.use('/', express.static(join(__dirname, 'public')));
-app.use(cors());
+const corsOptions = { credentials: true, origin: '*' };
+app.use(cors(corsOptions));
+//app.use(cors());
 
-app.use(function (req, res, next) {
-	// var allowedDomains = [
-	// 	'http://localhost:3001',
-	// 	'http://localhost:3000',
-	// 	'https://sp.crowdfundenergy.in',
-	// 	'https://consumer.crowdfundenergy.in',
-	// 	'https://consumer.crowdfundenergy.com',
-	// ];
-	// var origin = req.headers.origin;
+// app.use(function (req, res, next) {
+// 	var allowedDomains = [
+// 		'http://localhost:3001',
+// 		'http://localhost:3000',
+// 		'https://sp.crowdfundenergy.in',
+// 		'https://consumer.crowdfundenergy.in',
+// 		'https://consumer.crowdfundenergy.com',
+// 	];
+// 	var origin = req.headers.origin;
 
-	// if (allowedDomains.indexOf(origin) > -1) {
-	// 	res.setHeader('Access-Control-Allow-Origin', origin);
-	// }
+// 	if (allowedDomains.indexOf(origin) > -1) {
+// 		res.setHeader('Access-Control-Allow-Origin', origin);
+// 	}
 
-	res.setHeader('Access-Control-Allow-Origin', '*');
+// 	res.setHeader('Access-Control-Allow-Origin', '*');
 
-	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Accept');
-	res.setHeader('Access-Control-Allow-Credentials', true);
-	next();
-});
+// 	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+// 	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Accept');
+// 	res.setHeader('Access-Control-Allow-Credentials', true);
+// 	next();
+// });
 
 app.use(express.json());
 

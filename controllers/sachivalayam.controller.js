@@ -26,6 +26,19 @@ async function getAll(req, res) {
     }
 }
 
+//get all by id sachivalayam
+async function getAllById(req, res) {
+  try {
+      // Retrieve all by id sachivalayam using the Sequelize model
+      const {Sachivalayam} = await connectToDatabase();
+
+      const data = await Sachivalayam.findAll({where: {division_pk: req.params.id}});
+      return res.status(200).json({message : data});
+  }catch(e) {
+      return res.status(500).json({ error: e.message});
+  }
+}
+
 //get a single sachivalayam
 async function getById(req, res) {
     try {
@@ -74,6 +87,7 @@ async function updateById(req, res) {
   module.exports = {
     getById,
     getAll,
+    getAllById,
     create,
     updateById,
     deletedById,
