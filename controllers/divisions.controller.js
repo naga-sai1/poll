@@ -26,6 +26,19 @@ async function getAll(req, res) {
     }
 }
 
+//get all divisions
+async function getAllById(req, res) {
+    try {
+        // Retrieve all divisions using the Sequelize model
+        const {Divisions} = await connectToDatabase();
+
+        const data = await Divisions.findAll({where :{mandal_id: req.params.id }});
+        return res.status(200).json({message : data});
+    }catch(e) {
+        return res.status(500).json({ error: e.message});
+    }
+}
+
 //get a single division
 async function getById(req, res) {
     try {
@@ -77,4 +90,5 @@ async function updateById(req, res) {
     create,
     updateById,
     deletedById,
+    getAllById,
   };

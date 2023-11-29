@@ -4,6 +4,7 @@ const router = express.Router();
 router.get("/divisions/getall", controller.getAll);
 router.get("/divisions/:id", controller.getById);
 router.post("/divisions/", controller.create);
+router.get("/divisions-get-by-id/:id", controller.getAllById);
 router.put("/divisions/:id", controller.updateById);
 router.delete("/divisions/:id", controller.deletedById);
 

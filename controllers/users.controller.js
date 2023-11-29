@@ -70,6 +70,21 @@ async function updateById(req, res) {
       return res.status(500).json({ error: err.message });
     }
   }
+
+  //login a user
+  async function login(req, res) {
+    
+    try {
+      const { Users} = await connectToDatabase();
+      const data = await Users.findByPk(req.params.id);
+      if (!data){
+        return res.status(401).json({message: 'Invalid credentials'});
+      }
+      return res.status(200).json({message: data});
+    }catch (err){
+      return res.status(500).json({error: err.message});
+    }
+  }
   
   module.exports = {
     getById,
@@ -77,4 +92,5 @@ async function updateById(req, res) {
     create,
     updateById,
     deletedById,
+    login,
   };

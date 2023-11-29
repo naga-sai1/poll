@@ -18,12 +18,14 @@ module.exports = (sequelize, DataTypes) => {
         phone_no: DataTypes.STRING,
         permenent_address: DataTypes.STRING,
         current_address: DataTypes.STRING,
+        is_resident: DataTypes.BOOLEAN,
         state_id: DataTypes.INTEGER,
         consistency_id: DataTypes.INTEGER,
         mandal_id: DataTypes.INTEGER,
         division_id: DataTypes.INTEGER,
         sachivalayam_id: DataTypes.INTEGER,
         village_id: DataTypes.INTEGER,
+        email: DataTypes.STRING,
       },
   
       {
