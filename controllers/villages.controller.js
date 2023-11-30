@@ -26,6 +26,19 @@ async function getAll(req, res) {
     }
 }
 
+//get all by id villages
+async function getAllById(req, res) {
+  try {
+      // Retrieve all by id villages using the Sequelize model
+      const {Villages} = await connectToDatabase();
+
+      const data = await Villages.findAll({where: {part_no: req.params.id}});
+      return res.status(200).json({message : data});
+  }catch(e) {
+      return res.status(500).json({ error: e.message});
+  }
+}
+
 //get a single village
 async function getById(req, res) {
     try {
@@ -74,6 +87,7 @@ async function updateById(req, res) {
   module.exports = {
     getById,
     getAll,
+    getAllById,
     create,
     updateById,
     deletedById,

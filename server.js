@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const connectToDatabase = require('./misc/db');
 //const noteRouter = require('./routes/note.route.js');
-const conyterRouter = require('./routes/country.route.js');
+const countryRouter = require('./routes/country.route.js');
 const constituenciesRouter = require('./routes/constituencies.route.js');
 const designationRouter = require('./routes/designation.route.js');
 const districtsRouter = require('./routes/districts.route.js');
@@ -63,7 +63,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 //app.use(noteRouter);
-app.use(conyterRouter);
+app.use(countryRouter);
 app.use(statesRouter);
 app.use(boothsRouter);
 app.use(access_permisionRouter);
