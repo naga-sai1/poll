@@ -122,6 +122,9 @@ async function getAllWithJoin(req, res) {
 
     left join villages v on
     u.village_id = v.village_pk
+
+    left join lookup l on
+    u.designation_id = l.lookup_pk
 		;`;
 
 		const data = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
