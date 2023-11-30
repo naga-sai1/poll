@@ -7,4 +7,9 @@ router.post("/voters/", controller.create);
 router.put("/voters/:id", controller.updateById);
 router.delete("/voters/:id", controller.deletedById);
 
+//join queries
+router.get('/getallvoterswithjoin', controller.getAllWithJoin);
+router.post('/getallvoterswithjoinandwhere', controller.getAllWithJoinAndWhere);
+
+
 module.exports = router;

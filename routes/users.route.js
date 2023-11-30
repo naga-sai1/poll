@@ -8,4 +8,10 @@ router.post("/users-login/", controller.login);
 router.put("/users/:id", controller.updateById);
 router.delete("/users/:id", controller.deletedById);
 
+
+//join queries
+router.get('/getalluserswithjoin', controller.getAllWithJoin);
+router.post('/getalluserswithjoinandwhere', controller.getAllWithJoinAndWhere);
+
+
 module.exports = router;

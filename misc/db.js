@@ -57,12 +57,12 @@ const connection = {};
 module.exports = async () => {
 	if (connection.isConnected) {
 		console.log('=> Using existing connection.');
-		return Models;
+		return {sequelize , ...Models};
 	}
 
 	await sequelize.sync();
 	await sequelize.authenticate();
 	connection.isConnected = true;
 	console.log('=>Created a new connection.');
-	return Models;
+	return {sequelize , ...Models};;
 };
