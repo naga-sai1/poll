@@ -7,4 +7,7 @@ router.post("/ticket_master/", controller.create);
 router.put("/ticket_master/:id", controller.updateById);
 router.delete("/ticket_master/:id", controller.deletedById);
 
+//join queries
+router.get('/getallticketmasterwithjoin', controller.getAllWithJoin);
+
 module.exports = router;

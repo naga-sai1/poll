@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         office_phone_no : DataTypes.STRING,
         age: DataTypes.INTEGER,
         email: DataTypes.STRING,
+        designation_id: DataTypes.INTEGER,
         state_id: DataTypes.INTEGER,
         consistency_id: DataTypes.INTEGER,
         mandal_id: DataTypes.INTEGER,

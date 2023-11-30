@@ -101,10 +101,16 @@ async function getAllWithJoin(req, res) {
     v.sachivalayam_id = sv.sachivalayam_pk
 
     left join parts p on
-    v.part_no = p.part_pk
+    v.part_no = p.part_no
 
     left join villages vl on
     v.village_id = vl.village_pk
+
+    left join lookup l on 
+    v.guardian = l.lookup_pk AND v.gender = l.lookup_pk
+
+    left join users u on
+    v.volunteer_id = u.user_pk
     
 		;`;
 
@@ -148,10 +154,16 @@ async function getAllWithJoinAndWhere(req, res) {
       v.sachivalayam_id = sv.sachivalayam_pk
   
     left join parts p on
-      v.part_no = p.part_pk
+      v.part_no = p.part_no
   
     left join villages vl on
       v.village_id = vl.village_pk
+
+    left join lookup l on 
+      v.guardian = l.lookup_pk AND v.gender = l.lookup_pk
+  
+    left join users u on
+      v.volunteer_id = u.user_pk  
         
 		
 		WHERE 

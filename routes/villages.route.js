@@ -8,4 +8,7 @@ router.post("/villages/", controller.create);
 router.put("/villages/:id", controller.updateById);
 router.delete("/villages/:id", controller.deletedById);
 
+//join queries
+router.get('/getallvillageswithjoin', controller.getAllWithJoin);
+
 module.exports = router;
