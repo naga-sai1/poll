@@ -70,6 +70,29 @@ async function updateById(req, res) {
       return res.status(500).json({ error: err.message });
     }
   }
+
+  //joins
+async function getAllWithJoin(req, res) {
+  try {
+    const { sequelize } = await connectToDatabase();
+
+    const query = `
+		SELECT *
+		FROM page_access p
+
+    left join users u on
+    p.user_id = u.user_pk
+    
+		;`;
+
+    const data = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
+
+    return res.status(200).json({ message: data });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+}
+
   
   module.exports = {
     getById,
@@ -77,4 +100,5 @@ async function updateById(req, res) {
     create,
     updateById,
     deletedById,
+    getAllWithJoin,
   };

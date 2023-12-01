@@ -7,4 +7,8 @@ router.post("/ticket_escalation/", controller.create);
 router.put("/ticket_escalation/:id", controller.updateById);
 router.delete("/ticket_escalation/:id", controller.deletedById);
 
+//join queries
+router.get('/getallticketescalationwithjoin', controller.getAllWithJoin);
+
+
 module.exports = router;

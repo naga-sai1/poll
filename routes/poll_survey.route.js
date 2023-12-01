@@ -7,4 +7,8 @@ router.post("/poll_survey/", controller.create);
 router.put("/poll_survey/:id", controller.updateById);
 router.delete("/poll_survey/:id", controller.deletedById);
 
+//join queries
+router.get('/getallpollsurveywithjoin', controller.getAllWithJoin);
+
+
 module.exports = router;

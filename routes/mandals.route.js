@@ -7,4 +7,8 @@ router.post("/mandals/", controller.create);
 router.put("/mandals/:id", controller.updateById);
 router.delete("/mandals/:id", controller.deletedById);
 
+//join queries
+router.get('/getallmandalswithjoin', controller.getAllWithJoin);
+
+
 module.exports = router;

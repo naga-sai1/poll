@@ -7,4 +7,8 @@ router.post("/constituencies/", controller.create);
 router.put("/constituencies/:id", controller.updateById);
 router.delete("/constituencies/:id", controller.deletedById);
 
+//join queries
+router.get('/getallconstituencieswithjoin', controller.getAllWithJoin);
+
+
 module.exports = router;

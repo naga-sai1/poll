@@ -7,4 +7,8 @@ router.post("/ticket_attachments/", controller.create);
 router.put("/ticket_attachments/:id", controller.updateById);
 router.delete("/ticket_attachments/:id", controller.deletedById);
 
+//join queries
+router.get('/getallticketattachmentswithjoin', controller.getAllWithJoin);
+
+
 module.exports = router;

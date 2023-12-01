@@ -7,4 +7,8 @@ router.post("/page_access/", controller.create);
 router.put("/page_access/:id", controller.updateById);
 router.delete("/page_access/:id", controller.deletedById);
 
+//join queries
+router.get('/getallpageaccesswithjoin', controller.getAllWithJoin);
+
+
 module.exports = router;

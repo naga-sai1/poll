@@ -12,6 +12,7 @@ router.delete("/users/:id", controller.deletedById);
 //join queries
 router.get('/getalluserswithjoin', controller.getAllWithJoin);
 router.post('/getalluserswithjoinandwhere', controller.getAllWithJoinAndWhere);
+router.post('/getallbellowuser', controller.getBellowUserByDesignation);
 
 
 module.exports = router;

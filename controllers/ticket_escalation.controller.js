@@ -81,7 +81,7 @@ async function getAllWithJoin(req, res) {
 		FROM ticket_escalation te
 
     left join ticket_master tm on
-    te.ticket_master_id = tm.ticket_master_id
+    te.ticket_master_id = tm.ticket_master_pk
     
 		;`;
 

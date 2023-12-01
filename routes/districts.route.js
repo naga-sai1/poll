@@ -7,4 +7,8 @@ router.post("/districts/", controller.create);
 router.put("/districts/:id", controller.updateById);
 router.delete("/districts/:id", controller.deletedById);
 
+//join queries
+router.get('/getalldistrictswithjoin', controller.getAllWithJoin);
+
+
 module.exports = router;

@@ -8,4 +8,8 @@ router.get("/divisions-get-by-id/:id", controller.getAllById);
 router.put("/divisions/:id", controller.updateById);
 router.delete("/divisions/:id", controller.deletedById);
 
+//join queries
+router.get('/getalldivisionswithjoin', controller.getAllWithJoin);
+
+
 module.exports = router;

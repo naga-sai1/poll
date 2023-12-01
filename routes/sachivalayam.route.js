@@ -8,4 +8,8 @@ router.post("/sachivalayam/", controller.create);
 router.put("/sachivalayam/:id", controller.updateById);
 router.delete("/sachivalayam/:id", controller.deletedById);
 
+//join queries
+router.get('/getallsachivalayamwithjoin', controller.getAllWithJoin);
+
+
 module.exports = router;
