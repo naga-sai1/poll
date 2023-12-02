@@ -10,17 +10,18 @@ async function create(req, res) {
 
         console.log(state_name);
 
-        // const test = `
-        // SELECT *
-        // FROM states
-        // WHERE state_name = (:state_name)`;
+        const test = `
+        SELECT *
+        FROM states
+        WHERE state_name = (:state_name)`;
 
-        // console.log(test);
+        console.log(test);
 
-        // if (test != "") throw new HTTPError(404, `state_name ${state_name} is already exist`)
-        // else{}
+        if (test != "") throw new HTTPError(404, `state_name ${state_name} is already exist`)
+        else{
           const data = await States.create(req.body);
           return res.status(200).json({message: data });
+        }
     }catch(e) {
         return res.status(500).json({ error: e.message });
     }

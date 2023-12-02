@@ -48,8 +48,8 @@ async function updateById(req, res) {
       const data = await Constituencies.findByPk(req.params.id);
       if (!data) throw new HTTPError(404, `id: ${req.params.id} was not found`);
        // Update constituencies properties
-      if (req.body.district_pk) data.district_pk = req.body.district_pk;
-      if (req.body.consistency_name) data.consistency_name = req.body.consistency_name;
+      if (req.body.title) data.title = req.body.title;
+      if (req.body.description) data.description = req.body.description;
       await data.save();
       return res.status(200).json({ message: data });
     } catch (e) {
