@@ -127,6 +127,134 @@ async function getAllWithJoin(req, res) {
 	}
 }
 
+async function getOpinionReports(req, res) {
+	try {
+		const { sequelize } = await connectToDatabase();
+
+		//dropdownFilters
+		const { state_id, district_id, consistency_id, mandal_id, division_id, sachivalayam_id, part_no, village_id } =
+			req.body;
+
+		var query = `
+		SELECT 
+		m.mandal_pk , m.mandal_name, 
+dv.division_pk , dv.division_name ,  
+sv.sachivalayam_pk , sv.sachivalayam_name , 
+p.part_pk , p.part_no,
+vl.village_pk , vl.village_name,
+COUNT(*) as totalvoters,
+COUNT(CASE WHEN ps.intrested_party = 22 THEN 1 ELSE NULL END) as neutral,
+ROUND(((COUNT(CASE WHEN ps.intrested_party = 22 THEN 1 ELSE NULL END) / COUNT(*)) * 100), 1) AS pneutral,
+COUNT(CASE WHEN ps.intrested_party = 23 THEN 1 ELSE NULL END) as ysrcp,
+ROUND(((COUNT(CASE WHEN ps.intrested_party = 23 THEN 1 ELSE NULL END) / COUNT(*)) * 100), 1) AS pysrcp,
+COUNT(CASE WHEN ps.intrested_party = 24 THEN 1 ELSE NULL END) as tdp,
+ROUND(((COUNT(CASE WHEN ps.intrested_party = 24 THEN 1 ELSE NULL END) / COUNT(*)) * 100), 1) AS ptdp,
+COUNT(CASE WHEN ps.intrested_party = 25 THEN 1 ELSE NULL END) as congress,
+ROUND(((COUNT(CASE WHEN ps.intrested_party = 25 THEN 1 ELSE NULL END) / COUNT(*)) * 100), 1) AS pcongress,
+COUNT(CASE WHEN ps.intrested_party = 26 THEN 1 ELSE NULL END) as bjp,
+ROUND(((COUNT(CASE WHEN ps.intrested_party = 26 THEN 1 ELSE NULL END) / COUNT(*)) * 100), 1) AS pbjp,
+COUNT(CASE WHEN ps.intrested_party = 27 THEN 1 ELSE NULL END) as janasena,
+ROUND(((COUNT(CASE WHEN ps.intrested_party = 27 THEN 1 ELSE NULL END) / COUNT(*)) * 100), 1) AS pjanasena,
+COUNT(CASE WHEN ps.intrested_party = 80 THEN 1 ELSE NULL END) as otherss,
+ROUND(((COUNT(CASE WHEN ps.intrested_party = 80 THEN 1 ELSE NULL END) / COUNT(*)) * 100), 1) AS pothers
+
+FROM voters v
+
+        join poll_survey ps on
+        v.voter_pk = ps.voter_pk AND ps.intrested_party IS NOT NULL
+
+		left join states s on
+        v.state_id = s.state_pk
+
+		left join districts d on
+        v.district_id = d.district_pk
+
+    left join constituencies c on 
+       v.consistency_id = c.consistency_pk  
+       
+    left join mandals m on
+        v.mandal_id = m.mandal_pk   
+    
+    left join divisions dv on
+      v.division_id = dv.division_pk
+
+    left join sachivalayam sv on 
+      v.sachivalayam_id = sv.sachivalayam_pk
+  
+    left join parts p on
+      v.part_no = p.part_no
+  
+    left join villages vl on
+      v.village_id = vl.village_pk
+
+    left join lookup l on 
+      v.guardian = l.lookup_pk AND v.gender = l.lookup_pk
+  
+    left join users u on
+      v.volunteer_id = u.user_pk  
+        
+		
+	WHERE
+		 
+    v.state_id = (:state_id)`;
+
+		if (district_id != null && district_id != '') {
+			query += `AND
+    v.district_id = (:district_id)`;
+
+			if (consistency_id != null && consistency_id != '') {
+				query += `AND
+      v.consistency_id = (:consistency_id)`;
+
+				if (mandal_id != null && mandal_id != '') {
+					query += `AND
+        v.mandal_id = (:mandal_id)`;
+
+					if (division_id != null && division_id != '') {
+						query += `AND
+          v.division_id = (:division_id)`;
+
+						if (sachivalayam_id != null && sachivalayam_id != '') {
+							query += `AND
+            v.sachivalayam_id = (:sachivalayam_id)`;
+
+							if (part_no != null && part_no != '') {
+								query += `AND
+              v.part_no = (:part_no)`;
+
+								if (village_id != null && village_id != '') {
+									query += `AND
+                v.village_id = (:village_id)`;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		query += ' group by m.mandal_pk, dv.division_pk,sv.sachivalayam_pk, p.part_pk, vl.village_pk';
+
+		const data = await sequelize.query(query, {
+			type: sequelize.QueryTypes.SELECT,
+			replacements: {
+				state_id: state_id,
+				district_id: district_id,
+				consistency_id: consistency_id,
+				mandal_id: mandal_id,
+				division_id: division_id,
+				sachivalayam_id: sachivalayam_id,
+				part_no: part_no,
+				village_id: village_id,
+			},
+		});
+
+		return res.status(200).json({ message: data });
+	} catch (e) {
+		return res.status(500).json({ error: e.message });
+	}
+}
+
 async function getOpininoPollDashboardByJoinWhere(req, res) {
 	try {
 		const { sequelize } = await connectToDatabase();
@@ -236,7 +364,6 @@ async function getOpininoPollDashboardByJoinWhere(req, res) {
 		).length;
 		return res.status(200).json({
 			message: {
-				newVoterRegistration: newVoterRegistration,
 				totalVoters: totalVoters,
 				survey: {
 					surveysDone: surveysDone,
@@ -352,4 +479,5 @@ module.exports = {
 	deletedById,
 	getAllWithJoin,
 	getOpininoPollDashboardByJoinWhere,
+	getOpinionReports,
 };

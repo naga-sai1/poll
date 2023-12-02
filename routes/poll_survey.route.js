@@ -11,5 +11,6 @@ router.delete('/poll_survey/:id', controller.deletedById);
 router.get('/getallpollsurveywithjoin', controller.getAllWithJoin);
 
 router.post('/getopinionpolldashboard/', controller.getOpininoPollDashboardByJoinWhere);
+router.post('/getopinionreports/', controller.getOpinionReports);
 
 module.exports = router;
