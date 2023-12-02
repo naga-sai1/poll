@@ -6,8 +6,22 @@ async function create(req, res) {
         // Create the state using the Sequelize model
         const { States } = await connectToDatabase();
 
-        const data = await States.create(req.body);
-        return res.status(200).json({message: data });
+        const {state_name} = req.body
+
+        console.log(state_name);
+
+        const test = `
+        SELECT *
+        FROM states
+        WHERE state_name = (:state_name)`;
+
+        console.log(test);
+
+        if (test != "") throw new HTTPError(404, `state_name ${state_name} is already exist`)
+        else{
+          const data = await States.create(req.body);
+          return res.status(200).json({message: data });
+        }
     }catch(e) {
         return res.status(500).json({ error: e.message });
     }
@@ -48,8 +62,7 @@ async function updateById(req, res) {
       const data = await States.findByPk(req.params.id);
       if (!data) throw new HTTPError(404, `id: ${req.params.id} was not found`);
        // Update states properties
-      if (req.body.title) data.title = req.body.title;
-      if (req.body.description) data.description = req.body.description;
+      if (req.body.state_name) data.state_name = req.body.state_name;
       await data.save();
       return res.status(200).json({ message: data });
     } catch (e) {
