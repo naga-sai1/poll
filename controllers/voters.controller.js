@@ -113,7 +113,7 @@ async function getAllWithJoin(req, res) {
 		const { sequelize } = await connectToDatabase();
 
 		const query = `
-		SELECT *, l.lookup_valuename as guardian_catageri,ll.lookup_valuename as gender_catageri
+		SELECT *,v.age as voter_age ,  l.lookup_valuename as guardian_catageri,ll.lookup_valuename as gender_catageri
 		FROM voters v
 
     left join states s on
@@ -168,7 +168,7 @@ async function getAllWithJoinAndWhere(req, res) {
 			req.body;
 
 		var query = `
-		SELECT *, v.voter_pk as voter_pkk
+		SELECT *, v.age as voter_age , v.voter_pk as voter_pkk
 		FROM voters v
 
     left join poll_survey ps on
