@@ -113,7 +113,7 @@ async function getAllWithJoin(req, res) {
 		const { sequelize } = await connectToDatabase();
 
 		const query = `
-		SELECT *,v.age as voter_age ,  l.lookup_valuename as guardian_catageri,ll.lookup_valuename as gender_catageri
+		SELECT *, v.phone_no as voter_phone_no , v.age as voter_age ,  l.lookup_valuename as guardian_catageri,ll.lookup_valuename as gender_catageri
 		FROM voters v
 
     left join states s on
@@ -148,6 +148,9 @@ async function getAllWithJoin(req, res) {
 
     left join users u on
     v.volunteer_id = u.user_pk
+
+	WHERE
+	v.is_newregistration = false
     
 		;`;
 
@@ -168,7 +171,7 @@ async function getAllWithJoinAndWhere(req, res) {
 			req.body;
 
 		var query = `
-		SELECT *, v.age as voter_age , v.voter_pk as voter_pkk
+		SELECT *, v.phone_no as voter_phone_no , v.age as voter_age , v.voter_pk as voter_pkk
 		FROM voters v
 
     left join poll_survey ps on
@@ -205,7 +208,9 @@ async function getAllWithJoinAndWhere(req, res) {
       v.volunteer_id = u.user_pk  
         
 		
-		WHERE 
+	WHERE
+	v.is_newregistration = false
+	AND 
     v.state_id = (:state_id)`;
 
 		if (district_id != null && district_id != '') {
