@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 //const NoteModel = require('../models/Note');
 const CountryModel = require('../models/country');
 const AccessPermissionsModel = require('../models/access_permissions');
-const BoothsModel = require('../models/booths');
+//const BoothsModel = require('../models/booths');
 const StatesModel = require('../models/states');
 const ConstituenciesModel = require('../models/constituencies');
 const DesignationModel = require('../models/designation');
@@ -31,7 +31,7 @@ const sequelize = new Sequelize('u276789778_polling_survey', 'u276789778_polling
 //const Note = NoteModel(sequelize, Sequelize);
 const Country = CountryModel(sequelize, Sequelize);
 const Access_permissions = AccessPermissionsModel(sequelize, Sequelize);
-const Booths = BoothsModel(sequelize, Sequelize);
+//const Booths = BoothsModel(sequelize, Sequelize);
 const States = StatesModel(sequelize, Sequelize);
 const Constituencies = ConstituenciesModel(sequelize, Sequelize);
 const Designation = DesignationModel(sequelize, Sequelize);
@@ -51,18 +51,40 @@ const Users = UsersModel(sequelize, Sequelize);
 const Villages = VillagesModel(sequelize, Sequelize);
 const Voters = VotersModel(sequelize, Sequelize);
 
-const Models = { Country, Access_permissions, States, Booths, Constituencies, Designation, Districts, Divisions, Lookup, Mandals, Navaratnalu, Page_access, Parts, Poll_survey, Sachivalayam, Ticket_attachments, Ticket_escalation, Ticket_master, Users, Villages, Voters};
+const Models = {
+	Country,
+	Access_permissions,
+	States,
+
+	Constituencies,
+	Designation,
+	Districts,
+	Divisions,
+	Lookup,
+	Mandals,
+	Navaratnalu,
+	Page_access,
+	Parts,
+	Poll_survey,
+	Sachivalayam,
+	Ticket_attachments,
+	Ticket_escalation,
+	Ticket_master,
+	Users,
+	Villages,
+	Voters,
+};
 const connection = {};
 
 module.exports = async () => {
 	if (connection.isConnected) {
 		console.log('=> Using existing connection.');
-		return {sequelize , ...Models};
+		return { sequelize, ...Models };
 	}
 
 	await sequelize.sync();
 	await sequelize.authenticate();
 	connection.isConnected = true;
 	console.log('=>Created a new connection.');
-	return {sequelize , ...Models};;
+	return { sequelize, ...Models };
 };

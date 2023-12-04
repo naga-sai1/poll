@@ -92,16 +92,35 @@ async function login(req, res) {
 		const { phone_no, password } = req.body;
 		const { sequelize } = await connectToDatabase();
 		const _query = `
-		select * , l.lookup_valuename as desgination_name
+		select 
+		l.lookup_valuename as desgination_name,
+		c.consistency_name,
+        m.mandal_name,
+		d.division_name,
+		s.sachivalayam_name,
+		p.part_no,
+		v.village_name  
+
 		from users u
 		left join lookup l
 		on 
-		u.designation_id = l.lookup_pk 
+		u.designation_id = l.lookup_pk
+		left join constituencies c
+		on u.consistency_id =  c.consistency_pk 
+		left join mandals m
+		on u.mandal_id =  m.mandal_pk
+		left join divisions d
+		on u.division_id =  d.division_pk
+		left join sachivalayam s
+		on u.sachivalayam_id =  s.sachivalayam_pk    
+        left join parts p
+		on u.part_no = p.part_no
+		left join villages v
+		on u.village_id = v.village_pk
 		where 
 		u.phone_no = (:phone_no)
 		and
 		u.password = (:password)
-		
 		`;
 		const data = await sequelize.query(_query, {
 			type: sequelize.QueryTypes.SELECT,
