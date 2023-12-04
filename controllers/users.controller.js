@@ -93,6 +93,7 @@ async function login(req, res) {
 		const { sequelize } = await connectToDatabase();
 		const _query = `
 		select 
+		u.user_displayname,
 		l.lookup_valuename as desgination_name,
 		c.consistency_name,
         m.mandal_name,
