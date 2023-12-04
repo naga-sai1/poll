@@ -171,7 +171,8 @@ async function getAllWithJoinAndWhere(req, res) {
 			req.body;
 
 		var query = `
-		SELECT *, v.phone_no as voter_phone_no , v.age as voter_age , v.voter_pk as voter_pkk
+		SELECT *, 
+		v.phone_no as voter_phone_no , v.age as voter_age , v.voter_pk as voter_pkk
 		FROM voters v
 
     left join poll_survey ps on

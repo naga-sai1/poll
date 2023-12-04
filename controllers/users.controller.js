@@ -96,6 +96,7 @@ async function login(req, res) {
 		u.user_pk,
 		u.user_displayname,
 		l.lookup_valuename as desgination_name,
+		l.lookup_pk as desgination_id,
 		c.consistency_pk,
 		c.consistency_name,
 		m.mandal_pk,
@@ -200,11 +201,16 @@ async function getAllWithJoinAndWhere(req, res) {
 			req.body;
 
 		var query = `
-		SELECT *
+		SELECT 
+		*,
+		l.lookup_valuename as designation_name,
+		u.division_id as division_pkk
 		FROM users u
-        
-		
 
+		
+        
+		left join lookup l on
+        l.lookup_pk = u.designation_id
 		
 		left join states s on
         u.state_id = s.state_pk
