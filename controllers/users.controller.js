@@ -93,14 +93,20 @@ async function login(req, res) {
 		const { sequelize } = await connectToDatabase();
 		const _query = `
 		select 
+		u.user_pk,
 		u.user_displayname,
 		l.lookup_valuename as desgination_name,
+		c.consistency_pk,
 		c.consistency_name,
+		m.mandal_pk,
         m.mandal_name,
+		d.division_pk,
 		d.division_name,
+		s.sachivalayam_pk,
 		s.sachivalayam_name,
 		p.part_no,
-		v.village_name  
+		v.village_pk,
+		v.village_name 
 
 		from users u
 		left join lookup l
