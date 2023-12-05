@@ -26,6 +26,47 @@ async function getAll(req, res) {
     }
 }
 
+//get all religion
+async function getAllReligion(req, res){
+  try {
+		const { sequelize } = await connectToDatabase();
+
+		var query = `
+    SELECT *, l.lookup_valuename as religion_name
+    FROM lookup l
+    WHERE lookup_pk BETWEEN 81 AND 87`;
+
+		const data = await sequelize.query(query, {
+			type: sequelize.QueryTypes.SELECT,
+		});
+
+		return res.status(200).json({ message: data });
+	} catch (err) {
+		return res.status(500).json({ error: err.message });
+	}
+}
+
+//get all caste's
+async function getAllCastes(req, res){
+  try {
+		const { sequelize } = await connectToDatabase();
+
+		var query = `
+    SELECT *, l.lookup_valuename as caste_name
+    FROM lookup l
+    WHERE lookup_pk BETWEEN 88 AND 93`;
+
+		const data = await sequelize.query(query, {
+			type: sequelize.QueryTypes.SELECT,
+		});
+
+		return res.status(200).json({ message: data });
+	} catch (err) {
+		return res.status(500).json({ error: err.message });
+	}
+}
+
+
 //get a single lookup
 async function getById(req, res) {
     try {
@@ -74,6 +115,8 @@ async function updateById(req, res) {
   module.exports = {
     getById,
     getAll,
+    getAllReligion,
+    getAllCastes,
     create,
     updateById,
     deletedById,
