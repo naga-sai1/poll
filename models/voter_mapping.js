@@ -1,18 +1,24 @@
 module.exports = (sequelize, DataTypes) => {
 	return sequelize.define(
-		'sachivalayam',
+		'voter_mapping',
 		{
-			sachivalayam_pk: {
+			voter_mapping_pk: {
 				type: DataTypes.INTEGER,
 				primaryKey: true,
 				autoIncrement: true,
 			},
-			division_id: DataTypes.INTEGER,
-			sachivalayam_name: DataTypes.STRING,
+			voter_id: {
+				type: DataTypes.INTEGER,
+				allowNull: false,
+			},
+			user_id: {
+				type: DataTypes.INTEGER,
+				allowNull: false,
+			},
 		},
 
 		{
-			tableName: 'sachivalayam',
+			tableName: 'voter_mapping',
 			engine: 'InnoDB',
 			timestamps: false,
 		}

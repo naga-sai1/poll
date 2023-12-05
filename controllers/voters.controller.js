@@ -269,6 +269,35 @@ async function getAllWithJoinAndWhere(req, res) {
 	}
 }
 
+async function votersMappingtogruhasaradhi(req, res) {
+	try {
+		const { user_pk, voterspkList } = req.body;
+
+		const { VoterMapping } = await connectToDatabase();
+
+		for (const voter_pk of voterspkList) {
+			const existingEntry = await VoterMapping.findOne({
+				where: {
+					voter_id: voter_pk,
+				},
+			});
+
+			if (existingEntry) {
+				await existingEntry.update({ user_id: user_pk });
+			} else {
+				const newEntry = await VoterMapping.create({
+					voter_id: voter_pk,
+					user_id: user_pk,
+				});
+			}
+		}
+
+		res.status(200).json({ message: 'done' });
+	} catch (e) {
+		return res.status(500).json({ error: e.message });
+	}
+}
+
 module.exports = {
 	getById,
 	getAll,
@@ -279,4 +308,5 @@ module.exports = {
 	getAllWithJoinAndWhere,
 	updateVoterAddress,
 	updateVoterPhone,
+	votersMappingtogruhasaradhi,
 };

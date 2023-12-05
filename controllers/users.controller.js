@@ -93,6 +93,7 @@ async function login(req, res) {
 		const { sequelize } = await connectToDatabase();
 		const _query = `
 		select 
+		u.is_first_login,
 		u.user_pk,
 		u.user_displayname,
 		l.lookup_valuename as desgination_name,
@@ -346,33 +347,6 @@ async function volunteerMappingtoVoters(req, res) {
 	}
 }
 
-async function gruhasaradhiMappingtoVoters(req, res) {
-	try {
-		const { user_pk, voterspkList } = req.body;
-
-		const { sequelize } = await connectToDatabase();
-
-		for (const voterspk of voterspkList) {
-			var _query = `update
-			 voters
-			 set gruhasaradhi_id = (:user_pk)
-			 where voter_pk = (:voterspk)
-			`;
-			await sequelize.query(_query, {
-				type: sequelize.QueryTypes.UPDATE,
-				replacements: {
-					voterspk: voterspk,
-					user_pk: user_pk,
-				},
-			});
-		}
-
-		res.status(200).json({ message: 'done' });
-	} catch (e) {
-		return res.status(500).json({ error: e.message });
-	}
-}
-
 async function designationMappingtoUsers(req, res) {
 	try {
 		const { designation_pk, usersList } = req.body;
@@ -427,6 +401,25 @@ async function managerMappingtoUsers(req, res) {
 	}
 }
 
+// Update a address
+async function updateUserPassword(req, res) {
+	try {
+		const { voter_pk, permenent_address, current_address, is_resident } = req.body;
+		const { Voters } = await connectToDatabase();
+		// Update the  using the Sequelize model
+		const data = await Voters.findByPk(voter_pk);
+		if (!data) throw new HTTPError(404, `id: ${voter_pk} was not found`);
+		// Update  properties
+		if (permenent_address) data.permenent_address = permenent_address;
+		if (current_address) data.current_address = current_address;
+		if (is_resident) data.is_resident = is_resident;
+		await data.save();
+		return res.status(200).json({ message: data });
+	} catch (e) {
+		return res.status(500).json({ error: e.message });
+	}
+}
+
 module.exports = {
 	getById,
 	getAll,
@@ -438,5 +431,4 @@ module.exports = {
 	getAllWithJoinAndWhere,
 	getBellowUserByDesignation,
 	volunteerMappingtoVoters,
-	gruhasaradhiMappingtoVoters,
 };
