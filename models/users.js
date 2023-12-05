@@ -23,7 +23,6 @@ module.exports = (sequelize, DataTypes) => {
 			district_id: DataTypes.INTEGER,
 			is_first_login: DataTypes.BOOLEAN,
 		},
-
 		{
 			tableName: 'users',
 			engine: 'InnoDB',

@@ -10,7 +10,6 @@ module.exports = (sequelize, DataTypes) => {
 			division_id: DataTypes.INTEGER,
 			sachivalayam_name: DataTypes.STRING,
 		},
-
 		{
 			tableName: 'sachivalayam',
 			engine: 'InnoDB',
