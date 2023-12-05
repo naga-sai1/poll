@@ -20,7 +20,9 @@ async function create(req, res) {
 
 		if (existingEntry) {
 			// If the combination exists, update the existing entry
-			await existingEntry.update({ intrested_party: intrested_party });
+			await existingEntry.update({ 
+				intrested_party: intrested_party 
+			});
 			return res.status(200).json({ message: 'Entry updated successfully' });
 		} else {
 			// If the combination doesn't exist, create a new entry
@@ -36,18 +38,57 @@ async function create(req, res) {
 	}
 }
 
-//create a poll_survey
-async function create2(req, res) {
+async function save_or_updated_survey(req, res) {
 	try {
-		// Create the poll_survey using the Sequelize model
 		const { Poll_survey } = await connectToDatabase();
 
-		const data = await Poll_survey.create(req.body);
-		return res.status(200).json({ message: data });
+		const { volunteer_id, voter_pk, intrested_party, phone_no, residential, current_address, permenent_address, religion_id, caste_id, disability, govt_employee } = req.body;
+
+		
+
+		const existingEntry1 = await Poll_survey.findOne({
+			where: {
+				volunteer_id: volunteer_id,
+				voter_pk: voter_pk,
+			},
+		});
+
+		if (existingEntry1) {
+			await existingEntry1.update({
+				intrested_party: intrested_party,
+				phone_no: phone_no,
+				residential: residential,
+				current_address: current_address,
+				permenent_address: permenent_address,
+				religion_id: religion_id,
+				caste_id: caste_id,
+				disability: disability,
+				govt_employee: govt_employee
+			});
+			return res.status(200).json({ message: 'Entry updated successfully' });
+		} else {
+			const newEntry1 = await Poll_survey.create({
+				volunteer_id: volunteer_id,
+				voter_pk: voter_pk,
+				intrested_party: intrested_party,
+				phone_no: phone_no,
+				residential: residential,
+				current_address: current_address,
+				permenent_address: permenent_address,
+				religion_id: religion_id,
+				caste_id: caste_id,
+				disability: disability,
+				govt_employee: govt_employee,
+			});
+			return res.status(200).json({ message: 'Entry created successfully', data: newEntry1 });
+		}
+
 	} catch (e) {
 		return res.status(500).json({ error: e.message });
 	}
 }
+
+
 
 //get all poll_survey
 async function getAll(req, res) {
@@ -115,8 +156,9 @@ async function getAllWithJoin(req, res) {
 		SELECT *
 		FROM poll_survey ps
 
-    left join voters on v
-    ps.voter_pk = v.voter_pk    
+		left join voters on v
+		ps.voter_pk = v.voter_pk 
+
 		;`;
 
 		const data = await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
@@ -475,6 +517,7 @@ module.exports = {
 	getById,
 	getAll,
 	create,
+	save_or_updated_survey,
 	updateById,
 	deletedById,
 	getAllWithJoin,
