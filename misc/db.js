@@ -21,6 +21,7 @@ const Ticket_masterModel = require('../models/ticket_master');
 const UsersModel = require('../models/users');
 const VillagesModel = require('../models/villages');
 const VotersModel = require('../models/voters');
+const VoterMappingModel = require('../models/voter_mapping');
 
 const sequelize = new Sequelize('u276789778_polling_survey', 'u276789778_polling_survey', '123@Mango', {
 	dialect: 'mysql',
@@ -29,6 +30,7 @@ const sequelize = new Sequelize('u276789778_polling_survey', 'u276789778_polling
 });
 
 //const Note = NoteModel(sequelize, Sequelize);
+const VoterMapping = VoterMappingModel(sequelize, Sequelize);
 const Country = CountryModel(sequelize, Sequelize);
 const Access_permissions = AccessPermissionsModel(sequelize, Sequelize);
 //const Booths = BoothsModel(sequelize, Sequelize);
@@ -52,6 +54,7 @@ const Villages = VillagesModel(sequelize, Sequelize);
 const Voters = VotersModel(sequelize, Sequelize);
 
 const Models = {
+	VoterMapping,
 	Country,
 	Access_permissions,
 	States,

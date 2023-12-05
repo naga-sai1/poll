@@ -239,10 +239,6 @@ CREATE TABLE villages (
     FOREIGN KEY (booth_pk) REFERENCES booths(booth_pk)
 );
 
-
-
-
-
 -- Create Users Table
 CREATE TABLE users (
     user_pk INT AUTO_INCREMENT PRIMARY KEY,

@@ -13,7 +13,6 @@ router.get('/getalluserswithjoin', controller.getAllWithJoin);
 router.post('/getalluserswithjoinandwhere', controller.getAllWithJoinAndWhere);
 router.post('/getallbellowuser', controller.getBellowUserByDesignation);
 
-router.post('/voluteermappingtovoters', controller.volunteerMappingtoVoters);
-router.post('/gruhasaradhimappingtovoters', controller.gruhasaradhiMappingtoVoters);
+//router.post('/voluteermappingtovoters', controller.volunteerMappingtoVoters);
 
 module.exports = router;

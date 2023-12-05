@@ -14,4 +14,6 @@ router.post('/getallvoterswithjoinandwhere', controller.getAllWithJoinAndWhere);
 router.post('/updatevoteraddress', controller.updateVoterAddress);
 router.post('/updatevoterphone', controller.updateVoterPhone);
 
+router.post('/votersmappingtogruhasaradhi', controller.votersMappingtogruhasaradhi);
+
 module.exports = router;

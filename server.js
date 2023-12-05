@@ -26,6 +26,7 @@ const ticket_masterRouter = require('./routes/ticket_master.route.js');
 const userRouter = require('./routes/users.route.js');
 const villageRouter = require('./routes/villages.route.js');
 const votersRouter = require('./routes/voters.route.js');
+const twilioRouter = require('./routes/twilio.route.js');
 
 const { join } = require('path');
 
@@ -62,7 +63,7 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
-//app.use(noteRouter);
+app.use(twilioRouter);
 app.use(countryRouter);
 app.use(statesRouter);
 //app.use(boothsRouter);
