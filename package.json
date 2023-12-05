@@ -1,5 +1,5 @@
 {
-	"name": "paramedical_api",
+	"name": "project_api",
 	"version": "1.0.0",
 	"main": "server.js",
 	"scripts": {
