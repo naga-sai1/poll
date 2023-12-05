@@ -404,17 +404,19 @@ async function managerMappingtoUsers(req, res) {
 // Update a address
 async function updateUserPassword(req, res) {
 	try {
-		const { voter_pk, permenent_address, current_address, is_resident } = req.body;
-		const { Voters } = await connectToDatabase();
-		// Update the  using the Sequelize model
-		const data = await Voters.findByPk(voter_pk);
-		if (!data) throw new HTTPError(404, `id: ${voter_pk} was not found`);
+		const { user_pk, password } = req.body;
+		const { Users } = await connectToDatabase();
+		//Update the  using the Sequelize model
+		const data = await Users.findByPk(user_pk);
+		if (!data) throw new HTTPError(404, `id: ${user_pk} was not found`);
 		// Update  properties
-		if (permenent_address) data.permenent_address = permenent_address;
-		if (current_address) data.current_address = current_address;
-		if (is_resident) data.is_resident = is_resident;
+		if (password) {
+			data.password = password;
+			data.is_first_login = false;
+		}
+
 		await data.save();
-		return res.status(200).json({ message: data });
+		return res.status(200).json({ message: 'done' });
 	} catch (e) {
 		return res.status(500).json({ error: e.message });
 	}
@@ -431,4 +433,5 @@ module.exports = {
 	getAllWithJoinAndWhere,
 	getBellowUserByDesignation,
 	volunteerMappingtoVoters,
+	updateUserPassword,
 };
