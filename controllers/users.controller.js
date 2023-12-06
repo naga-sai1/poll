@@ -49,8 +49,27 @@ async function updateById(req, res) {
 		const data = await Users.findByPk(req.params.id);
 		if (!data) throw new HTTPError(404, `id: ${req.params.id} was not found`);
 		// Update users properties
-		if (req.body.title) data.title = req.body.title;
-		if (req.body.description) data.description = req.body.description;
+		//if (req.body.title) data.title = req.body.title;
+		//if (req.body.description) data.description = req.body.description;
+		if (req.body.user_displayname) data.user_displayname = req.body.user_displayname;
+		if (req.body.username) data.username = req.body.username;
+		if (req.body.password) data.password = req.body.password;
+		if (req.body.phone_no) data.phone_no = req.body.phone_no;
+		if (req.body.office_phone_no) data.office_phone_no = req.body.office_phone_no;
+		if (req.body.age) data.age = req.body.age;
+		if (req.body.email) data.email = req.body.email;
+		if (req.body.designation_id) data.designation_id = req.body.designation_id;
+		if (req.body.reporting_manager) data.reporting_manager = req.body.reporting_manager;
+		if (req.body.state_id) data.state_id = req.body.state_id;
+		if (req.body.consistency_id) data.consistency_id = req.body.consistency_id;
+		if (req.body.mandal_id) data.mandal_id = req.body.mandal_id;
+		if (req.body.division_id) data.division_id = req.body.division_id;
+		if (req.body.sachivalayam_id) data.sachivalayam_id = req.body.sachivalayam_id;
+		if (req.body.village_id) data.village_id = req.body.village_id;
+		if (req.body.is_first_login) data.is_first_login = req.body.is_first_login;
+		if (req.body.otp) data.otp = req.body.otp;
+		if (req.body.district_id) data.district_id = req.body.district_id;
+		if (req.body.part_no) data.part_no = req.body.part_no;
 		await data.save();
 		return res.status(200).json({ message: data });
 	} catch (e) {
