@@ -66,6 +66,26 @@ async function getAllCastes(req, res){
 	}
 }
 
+//get all designations
+async function getAllDesignations(req, res){
+  try {
+		const { sequelize } = await connectToDatabase();
+
+		var query = `
+    SELECT *, l.lookup_valuename as designation_name
+    FROM lookup l
+    WHERE lookup_pk BETWEEN 30 AND 38`;
+
+		const data = await sequelize.query(query, {
+			type: sequelize.QueryTypes.SELECT,
+		});
+
+		return res.status(200).json({ message: data });
+	} catch (err) {
+		return res.status(500).json({ error: err.message });
+	}
+}
+
 
 //get a single lookup
 async function getById(req, res) {
@@ -120,4 +140,5 @@ async function updateById(req, res) {
     create,
     updateById,
     deletedById,
+    getAllDesignations,
   };
