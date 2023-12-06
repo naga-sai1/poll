@@ -48,7 +48,6 @@ async function save_or_updated_survey(req, res) {
 
 		const existingEntry1 = await Poll_survey.findOne({
 			where: {
-				volunteer_id: volunteer_id,
 				voter_pk: voter_pk,
 			},
 		});

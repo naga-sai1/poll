@@ -8,6 +8,7 @@ async function create(req, res) {
 		const { Users } = await connectToDatabase();
 
 		const data = await Users.create(req.body);
+		console.log(data);
 		return res.status(200).json({ message: data });
 	} catch (e) {
 		return res.status(500).json({ error: e.message });

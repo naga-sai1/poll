@@ -23,7 +23,6 @@ module.exports = (sequelize, DataTypes) => {
 			sachivalayam_id: DataTypes.INTEGER,
 			village_id: DataTypes.INTEGER,
 			district_id: DataTypes.INTEGER,
-			is_first_login: DataTypes.BOOLEAN,
 			part_no: DataTypes.INTEGER,
 		},
 		{

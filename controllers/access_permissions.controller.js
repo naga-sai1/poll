@@ -48,8 +48,9 @@ async function updateById(req, res) {
       const data = await Access_permissions.findByPk(req.params.id);
       if (!data) throw new HTTPError(404, `id: ${req.params.id} was not found`);
        // Update access_permissions properties
-      if (req.body.title) data.title = req.body.title;
-      if (req.body.description) data.description = req.body.description;
+      //if (req.body.title) data.title = req.body.title;
+      //if (req.body.description) data.description = req.body.description;
+      if (req.body.user_id) data.user_id = req.body.user_id;
       await data.save();
       return res.status(200).json({ message: data });
     } catch (e) {
