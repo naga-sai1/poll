@@ -7,10 +7,10 @@ router.post("/lookup/", controller.create);
 router.put("/lookup/:id", controller.updateById);
 router.delete("/lookup/:id", controller.deletedById);
 
-router.get("/getAllReligion", controller.getAllReligion);
-router.get("/getAllCastes", controller.getAllCastes);
-router.get("/getalldesignations", controller.getAllDesignations);
-router.get("/getallparties", controller.getAllParties);
+router.post("/getAllReligion", controller.getAllReligion);
+router.post("/getAllCastes", controller.getAllCastes);
+router.post("/getalldesignations", controller.getAllDesignations);
+router.post("/getallparties", controller.getAllParties);
 
 
 module.exports = router;
