@@ -129,8 +129,8 @@ async function updateById(req, res) {
       const data = await Lookup.findByPk(req.params.id);
       if (!data) throw new HTTPError(404, `id: ${req.params.id} was not found`);
        // Update lookup properties
-      if (req.body.title) data.title = req.body.title;
-      if (req.body.description) data.description = req.body.description;
+      if (req.body.lookup_name) data.lookup_name = req.body.lookup_name;
+      if (req.body.lookup_valuename) data.lookup_valuename = req.body.lookup_valuename;
       await data.save();
       return res.status(200).json({ message: data });
     } catch (e) {
