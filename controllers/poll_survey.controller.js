@@ -1,7 +1,11 @@
+<<<<<<< Updated upstream
 //import { neutralLookUpname, ycpLookUpname } from '../misc/constants.js';
 //const { neutralLookUpname, ycpLookUpname } = require('../misc/constants.js');
 
 const connectToDatabase = require("../misc/db");
+=======
+const connectToDatabase = require('../misc/db');
+>>>>>>> Stashed changes
 
 async function create(req, res) {
   try {
@@ -18,6 +22,7 @@ async function create(req, res) {
       },
     });
 
+<<<<<<< Updated upstream
     if (existingEntry) {
       // If the combination exists, update the existing entry
       await existingEntry.update({
@@ -38,12 +43,33 @@ async function create(req, res) {
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
+=======
+		if (existingEntry) {
+			// If the combination exists, update the existing entry
+			await existingEntry.update({
+				intrested_party: intrested_party,
+			});
+			return res.status(200).json({ message: 'Entry updated successfully' });
+		} else {
+			// If the combination doesn't exist, create a new entry
+			const newEntry = await Poll_survey.create({
+				volunteer_id: volunteer_id,
+				voter_pk: voter_pk,
+				intrested_party: intrested_party,
+			});
+			return res.status(200).json({ message: 'Entry created successfully', data: newEntry });
+		}
+	} catch (e) {
+		return res.status(500).json({ error: e.message });
+	}
+>>>>>>> Stashed changes
 }
 
 async function save_or_updated_survey(req, res) {
   try {
     const { Poll_survey } = await connectToDatabase();
 
+<<<<<<< Updated upstream
     const {
       volunteer_id,
       voter_pk,
@@ -98,6 +124,62 @@ async function save_or_updated_survey(req, res) {
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
+=======
+		const {
+			volunteer_id,
+			voter_pk,
+			intrested_party,
+			survey_phone_no,
+			residential,
+			current_address,
+			permenent_address,
+			religion_id,
+			caste_id,
+			disability,
+			govt_employee,
+		} = req.body;
+
+		console.log(req.body);
+
+		const existingEntry1 = await Poll_survey.findOne({
+			where: {
+				voter_pk: voter_pk,
+			},
+		});
+
+		if (existingEntry1) {
+			await existingEntry1.update({
+				intrested_party: intrested_party,
+				phone_no: survey_phone_no,
+				residential: residential,
+				current_address: current_address,
+				permenent_address: permenent_address,
+				religion_id: religion_id,
+				caste_id: caste_id,
+				disability: disability,
+				govt_employee: govt_employee,
+			});
+			return res.status(200).json({ message: 'Entry updated successfully' });
+		} else {
+			const newEntry1 = await Poll_survey.create({
+				volunteer_id: volunteer_id,
+				voter_pk: voter_pk,
+				intrested_party: intrested_party,
+				phone_no: survey_phone_no,
+				residential: residential,
+				current_address: current_address,
+				permenent_address: permenent_address,
+				religion_id: religion_id,
+				caste_id: caste_id,
+				disability: disability,
+				govt_employee: govt_employee,
+			});
+			return res.status(200).json({ message: 'Entry created successfully', data: newEntry1 });
+		}
+	} catch (e) {
+		return res.status(500).json({ error: e.message });
+	}
+>>>>>>> Stashed changes
 }
 
 //get all poll_survey

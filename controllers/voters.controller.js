@@ -172,10 +172,17 @@ async function getAllWithJoinAndWhere(req, res) {
 
 		var query = `
 		SELECT *, 
-		v.phone_no as voter_phone_no , v.age as voter_age , v.voter_pk as voter_pkk
-		FROM voters v
+		v.phone_no as voter_phone_no ,
+		ps.phone_no as survey_phone_no,
+		v.age as voter_age , v.voter_pk as voter_pkk,
+		(SELECT lookup_valuename FROM lookup WHERE lookup_pk = ps.caste_id) AS caste_name,
+		(SELECT lookup_valuename FROM lookup WHERE lookup_pk = ps.religion_id) AS religion_name,
+		(SELECT lookup_valuename FROM lookup WHERE lookup_pk = v.guardian) AS guardian_type,
+		(SELECT lookup_valuename FROM lookup WHERE lookup_pk = v.gender) AS gender_type
+		FROM 
+		voters v
 
-    left join poll_survey ps on
+        left join poll_survey ps on
         v.voter_pk = ps.voter_pk
 
 		left join states s on
@@ -184,16 +191,16 @@ async function getAllWithJoinAndWhere(req, res) {
 		left join districts d on
         v.district_id = d.district_pk
 
-    left join constituencies c on 
-       v.consistency_id = c.consistency_pk  
+        left join constituencies c on 
+        v.consistency_id = c.consistency_pk  
        
-    left join mandals m on
+        left join mandals m on
         v.mandal_id = m.mandal_pk   
     
-    left join divisions dv on
-      v.division_id = dv.division_pk
+        left join divisions dv on
+         v.division_id = dv.division_pk
 
-    left join sachivalayam sv on 
+        left join sachivalayam sv on 
       v.sachivalayam_id = sv.sachivalayam_pk
   
     left join parts p on
@@ -202,8 +209,7 @@ async function getAllWithJoinAndWhere(req, res) {
     left join villages vl on
       v.village_id = vl.village_pk
 
-    left join lookup l on 
-      v.guardian = l.lookup_pk AND v.gender = l.lookup_pk
+    
   
     left join users u on
       v.volunteer_id = u.user_pk  

@@ -1,7 +1,7 @@
 const express = require('express');
 const controller = require('../controllers/poll_survey.controller.js');
 const router = express.Router();
-router.get('/poll_survey/getall', controller.getAll);
+router.post('/poll_survey/getall', controller.getAll);
 router.get('/poll_survey/:id', controller.getById);
 router.post('/poll_survey/', controller.create);
 router.post('/save_or_updated_survey', controller.save_or_updated_survey);

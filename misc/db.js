@@ -27,6 +27,7 @@ const sequelize = new Sequelize('u276789778_polling_survey', 'u276789778_polling
 	dialect: 'mysql',
 	host: '62.72.28.52',
 	port: 3306,
+	logging: true,
 });
 
 //const Note = NoteModel(sequelize, Sequelize);
