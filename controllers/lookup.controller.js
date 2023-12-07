@@ -34,7 +34,7 @@ async function getAllReligion(req, res){
 		var query = `
     SELECT *, l.lookup_valuename as religion_name
     FROM lookup l
-    WHERE lookup_pk BETWEEN 81 AND 87`;
+    WHERE lookup_name = "religion_list"`;
 
 		const data = await sequelize.query(query, {
 			type: sequelize.QueryTypes.SELECT,
@@ -54,7 +54,7 @@ async function getAllCastes(req, res){
 		var query = `
     SELECT *, l.lookup_valuename as caste_name
     FROM lookup l
-    WHERE lookup_pk BETWEEN 88 AND 93`;
+    WHERE lookup_name = "caste_list"`;
 
 		const data = await sequelize.query(query, {
 			type: sequelize.QueryTypes.SELECT,
@@ -74,7 +74,7 @@ async function getAllDesignations(req, res){
 		var query = `
     SELECT *, l.lookup_valuename as designation_name
     FROM lookup l
-    WHERE lookup_pk BETWEEN 30 AND 38`;
+    WHERE lookup_name = "designationlist"`;
 
 		const data = await sequelize.query(query, {
 			type: sequelize.QueryTypes.SELECT,
@@ -94,7 +94,7 @@ async function getAllPartys(req, res){
 		var query = `
     SELECT *, l.lookup_valuename as party_name
     FROM lookup l
-    WHERE lookup_pk BETWEEN 22 AND 27`;
+    WHERE lookup_name = "party_list"`;
 
 		const data = await sequelize.query(query, {
 			type: sequelize.QueryTypes.SELECT,
