@@ -1,49 +1,20 @@
-<<<<<<< Updated upstream
-//import { neutralLookUpname, ycpLookUpname } from '../misc/constants.js';
-//const { neutralLookUpname, ycpLookUpname } = require('../misc/constants.js');
-
-const connectToDatabase = require("../misc/db");
-=======
 const connectToDatabase = require('../misc/db');
->>>>>>> Stashed changes
 
 async function create(req, res) {
-  try {
-    // Create or update the poll_survey using the Sequelize model
-    const { Poll_survey } = await connectToDatabase();
+	try {
+		// Create or update the poll_survey using the Sequelize model
+		const { Poll_survey } = await connectToDatabase();
 
-    const { volunteer_id, voter_pk, intrested_party } = req.body;
+		const { volunteer_id, voter_pk, intrested_party } = req.body;
 
-    // Check if the combination of volunteer_id and voter_pk exists
-    const existingEntry = await Poll_survey.findOne({
-      where: {
-        volunteer_id: volunteer_id,
-        voter_pk: voter_pk,
-      },
-    });
+		// Check if the combination of volunteer_id and voter_pk exists
+		const existingEntry = await Poll_survey.findOne({
+			where: {
+				volunteer_id: volunteer_id,
+				voter_pk: voter_pk,
+			},
+		});
 
-<<<<<<< Updated upstream
-    if (existingEntry) {
-      // If the combination exists, update the existing entry
-      await existingEntry.update({
-        intrested_party: intrested_party,
-      });
-      return res.status(200).json({ message: "Entry updated successfully" });
-    } else {
-      // If the combination doesn't exist, create a new entry
-      const newEntry = await Poll_survey.create({
-        volunteer_id: volunteer_id,
-        voter_pk: voter_pk,
-        intrested_party: intrested_party,
-      });
-      return res
-        .status(200)
-        .json({ message: "Entry created successfully", data: newEntry });
-    }
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
-=======
 		if (existingEntry) {
 			// If the combination exists, update the existing entry
 			await existingEntry.update({
@@ -62,74 +33,17 @@ async function create(req, res) {
 	} catch (e) {
 		return res.status(500).json({ error: e.message });
 	}
->>>>>>> Stashed changes
 }
 
 async function save_or_updated_survey(req, res) {
-  try {
-    const { Poll_survey } = await connectToDatabase();
+	try {
+		const { Poll_survey } = await connectToDatabase();
 
-<<<<<<< Updated upstream
-    const {
-      volunteer_id,
-      voter_pk,
-      intrested_party,
-      phone_no,
-      residential,
-      current_address,
-      permenent_address,
-      religion_id,
-      caste_id,
-      disability,
-      govt_employee,
-    } = req.body;
-
-    const existingEntry1 = await Poll_survey.findOne({
-      where: {
-        voter_pk: voter_pk,
-      },
-    });
-
-    if (existingEntry1) {
-      await existingEntry1.update({
-        intrested_party: intrested_party,
-        phone_no: phone_no,
-        residential: residential,
-        current_address: current_address,
-        permenent_address: permenent_address,
-        religion_id: religion_id,
-        caste_id: caste_id,
-        disability: disability,
-        govt_employee: govt_employee,
-      });
-      return res.status(200).json({ message: "Entry updated successfully" });
-    } else {
-      const newEntry1 = await Poll_survey.create({
-        volunteer_id: volunteer_id,
-        voter_pk: voter_pk,
-        intrested_party: intrested_party,
-        phone_no: phone_no,
-        residential: residential,
-        current_address: current_address,
-        permenent_address: permenent_address,
-        religion_id: religion_id,
-        caste_id: caste_id,
-        disability: disability,
-        govt_employee: govt_employee,
-      });
-      return res
-        .status(200)
-        .json({ message: "Entry created successfully", data: newEntry1 });
-    }
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
-=======
 		const {
 			volunteer_id,
 			voter_pk,
 			intrested_party,
-			survey_phone_no,
+			phone_no,
 			residential,
 			current_address,
 			permenent_address,
@@ -138,8 +52,6 @@ async function save_or_updated_survey(req, res) {
 			disability,
 			govt_employee,
 		} = req.body;
-
-		console.log(req.body);
 
 		const existingEntry1 = await Poll_survey.findOne({
 			where: {
@@ -150,7 +62,7 @@ async function save_or_updated_survey(req, res) {
 		if (existingEntry1) {
 			await existingEntry1.update({
 				intrested_party: intrested_party,
-				phone_no: survey_phone_no,
+				phone_no: phone_no,
 				residential: residential,
 				current_address: current_address,
 				permenent_address: permenent_address,
@@ -165,7 +77,7 @@ async function save_or_updated_survey(req, res) {
 				volunteer_id: volunteer_id,
 				voter_pk: voter_pk,
 				intrested_party: intrested_party,
-				phone_no: survey_phone_no,
+				phone_no: phone_no,
 				residential: residential,
 				current_address: current_address,
 				permenent_address: permenent_address,
@@ -179,72 +91,71 @@ async function save_or_updated_survey(req, res) {
 	} catch (e) {
 		return res.status(500).json({ error: e.message });
 	}
->>>>>>> Stashed changes
 }
 
 //get all poll_survey
 async function getAll(req, res) {
-  try {
-    // Retrieve all poll_survey using the Sequelize model
-    const { Poll_survey } = await connectToDatabase();
+	try {
+		// Retrieve all poll_survey using the Sequelize model
+		const { Poll_survey } = await connectToDatabase();
 
-    const data = await Poll_survey.findAll();
-    return res.status(200).json({ message: data });
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
+		const data = await Poll_survey.findAll();
+		return res.status(200).json({ message: data });
+	} catch (e) {
+		return res.status(500).json({ error: e.message });
+	}
 }
 
 //get a single poll_survey
 async function getById(req, res) {
-  try {
-    // Retrieve the poll_survey using the Sequelize model and the ID from req.params.id
-    const { Poll_survey } = await connectToDatabase();
+	try {
+		// Retrieve the poll_survey using the Sequelize model and the ID from req.params.id
+		const { Poll_survey } = await connectToDatabase();
 
-    const data = await Poll_survey.findByPk(req.params.id);
-    if (!data) throw new HTTPError(404, `id: ${req.params.id} was not found`);
-    return res.status(200).json({ message: data });
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
+		const data = await Poll_survey.findByPk(req.params.id);
+		if (!data) throw new HTTPError(404, `id: ${req.params.id} was not found`);
+		return res.status(200).json({ message: data });
+	} catch (e) {
+		return res.status(500).json({ error: e.message });
+	}
 }
 
 // Update a poll_survey
 async function updateById(req, res) {
-  try {
-    const { Poll_survey } = await connectToDatabase();
-    // Update the poll_survey using the Sequelize model
-    const data = await Poll_survey.findByPk(req.params.id);
-    if (!data) throw new HTTPError(404, `id: ${req.params.id} was not found`);
-    // Update poll_survey properties
-    if (req.body.title) data.title = req.body.title;
-    if (req.body.description) data.description = req.body.description;
-    await data.save();
-    return res.status(200).json({ message: data });
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
+	try {
+		const { Poll_survey } = await connectToDatabase();
+		// Update the poll_survey using the Sequelize model
+		const data = await Poll_survey.findByPk(req.params.id);
+		if (!data) throw new HTTPError(404, `id: ${req.params.id} was not found`);
+		// Update poll_survey properties
+		if (req.body.title) data.title = req.body.title;
+		if (req.body.description) data.description = req.body.description;
+		await data.save();
+		return res.status(200).json({ message: data });
+	} catch (e) {
+		return res.status(500).json({ error: e.message });
+	}
 }
 
 //delete a poll_survey
 async function deletedById(req, res) {
-  try {
-    const { Poll_survey } = await connectToDatabase();
-    const data = await Poll_survey.findByPk(req.params.id);
-    if (!data) throw new HTTPError(404, `id: ${req.params.id} was not found`);
-    await data.destroy();
-    return res.status(200).json({ message: data });
-  } catch (err) {
-    return res.status(500).json({ error: err.message });
-  }
+	try {
+		const { Poll_survey } = await connectToDatabase();
+		const data = await Poll_survey.findByPk(req.params.id);
+		if (!data) throw new HTTPError(404, `id: ${req.params.id} was not found`);
+		await data.destroy();
+		return res.status(200).json({ message: data });
+	} catch (err) {
+		return res.status(500).json({ error: err.message });
+	}
 }
 
 //joins
 async function getAllWithJoin(req, res) {
-  try {
-    const { sequelize } = await connectToDatabase();
+	try {
+		const { sequelize } = await connectToDatabase();
 
-    const query = `
+		const query = `
 		SELECT *
 		FROM poll_survey ps
 
@@ -253,33 +164,25 @@ async function getAllWithJoin(req, res) {
 
 		;`;
 
-    const data = await sequelize.query(query, {
-      type: sequelize.QueryTypes.SELECT,
-    });
+		const data = await sequelize.query(query, {
+			type: sequelize.QueryTypes.SELECT,
+		});
 
-    return res.status(200).json({ message: data });
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
+		return res.status(200).json({ message: data });
+	} catch (e) {
+		return res.status(500).json({ error: e.message });
+	}
 }
 
 async function getOpinionReports(req, res) {
-  try {
-    const { sequelize } = await connectToDatabase();
+	try {
+		const { sequelize } = await connectToDatabase();
 
-    //dropdownFilters
-    const {
-      state_id,
-      district_id,
-      consistency_id,
-      mandal_id,
-      division_id,
-      sachivalayam_id,
-      part_no,
-      village_id,
-    } = req.body;
+		//dropdownFilters
+		const { state_id, district_id, consistency_id, mandal_id, division_id, sachivalayam_id, part_no, village_id } =
+			req.body;
 
-    var query = `
+		var query = `
 		SELECT 
 		m.mandal_pk , m.mandal_name, 
 dv.division_pk , dv.division_name ,  
@@ -342,81 +245,72 @@ FROM voters v
 		 
     v.state_id = (:state_id)`;
 
-    if (district_id != null && district_id != "") {
-      query += `AND
+		if (district_id != null && district_id != '') {
+			query += `AND
     v.district_id = (:district_id)`;
 
-      if (consistency_id != null && consistency_id != "") {
-        query += `AND
+			if (consistency_id != null && consistency_id != '') {
+				query += `AND
       v.consistency_id = (:consistency_id)`;
 
-        if (mandal_id != null && mandal_id != "") {
-          query += `AND
+				if (mandal_id != null && mandal_id != '') {
+					query += `AND
         v.mandal_id = (:mandal_id)`;
 
-          if (division_id != null && division_id != "") {
-            query += `AND
+					if (division_id != null && division_id != '') {
+						query += `AND
           v.division_id = (:division_id)`;
 
-            if (sachivalayam_id != null && sachivalayam_id != "") {
-              query += `AND
+						if (sachivalayam_id != null && sachivalayam_id != '') {
+							query += `AND
             v.sachivalayam_id = (:sachivalayam_id)`;
 
-              if (part_no != null && part_no != "") {
-                query += `AND
+							if (part_no != null && part_no != '') {
+								query += `AND
               v.part_no = (:part_no)`;
 
-                if (village_id != null && village_id != "") {
-                  query += `AND
+								if (village_id != null && village_id != '') {
+									query += `AND
                 v.village_id = (:village_id)`;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 
-    query +=
-      " group by m.mandal_pk, dv.division_pk,sv.sachivalayam_pk, p.part_pk, vl.village_pk";
+		query += ' group by m.mandal_pk, dv.division_pk,sv.sachivalayam_pk, p.part_pk, vl.village_pk';
 
-    const data = await sequelize.query(query, {
-      type: sequelize.QueryTypes.SELECT,
-      replacements: {
-        state_id: state_id,
-        district_id: district_id,
-        consistency_id: consistency_id,
-        mandal_id: mandal_id,
-        division_id: division_id,
-        sachivalayam_id: sachivalayam_id,
-        part_no: part_no,
-        village_id: village_id,
-      },
-    });
+		const data = await sequelize.query(query, {
+			type: sequelize.QueryTypes.SELECT,
+			replacements: {
+				state_id: state_id,
+				district_id: district_id,
+				consistency_id: consistency_id,
+				mandal_id: mandal_id,
+				division_id: division_id,
+				sachivalayam_id: sachivalayam_id,
+				part_no: part_no,
+				village_id: village_id,
+			},
+		});
 
-    return res.status(200).json({ message: data });
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
+		return res.status(200).json({ message: data });
+	} catch (e) {
+		return res.status(500).json({ error: e.message });
+	}
 }
 
 async function getOpininoPollDashboardByJoinWhere(req, res) {
-  try {
-    const { sequelize } = await connectToDatabase();
+	try {
+		const { sequelize } = await connectToDatabase();
 
-    //dropdownFilters
-    const {
-      state_id,
-      district_id,
-      consistency_id,
-      mandal_id,
-      division_id,
-      sachivalayam_id,
-      part_no,
-      village_id,
-    } = req.body;
+		//dropdownFilters
+		const { state_id, district_id, consistency_id, mandal_id, division_id, sachivalayam_id, part_no, village_id } =
+			req.body;
 
-    var query = `
+		var query = `
 		SELECT *, 
     v.phone_no as voter_phone_no , 
     v.age as voter_age , 
@@ -461,211 +355,177 @@ async function getOpininoPollDashboardByJoinWhere(req, res) {
 		 
     v.state_id = (:state_id)`;
 
-    if (district_id != null && district_id != "") {
-      query += `AND
+		if (district_id != null && district_id != '') {
+			query += `AND
     v.district_id = (:district_id)`;
 
-      if (consistency_id != null && consistency_id != "") {
-        query += `AND
+			if (consistency_id != null && consistency_id != '') {
+				query += `AND
       v.consistency_id = (:consistency_id)`;
 
-        if (mandal_id != null && mandal_id != "") {
-          query += `AND
+				if (mandal_id != null && mandal_id != '') {
+					query += `AND
         v.mandal_id = (:mandal_id)`;
 
-          if (division_id != null && division_id != "") {
-            query += `AND
+					if (division_id != null && division_id != '') {
+						query += `AND
           v.division_id = (:division_id)`;
 
-            if (sachivalayam_id != null && sachivalayam_id != "") {
-              query += `AND
+						if (sachivalayam_id != null && sachivalayam_id != '') {
+							query += `AND
             v.sachivalayam_id = (:sachivalayam_id)`;
 
-              if (part_no != null && part_no != "") {
-                query += `AND
+							if (part_no != null && part_no != '') {
+								query += `AND
               v.part_no = (:part_no)`;
 
-                if (village_id != null && village_id != "") {
-                  query += `AND
+								if (village_id != null && village_id != '') {
+									query += `AND
                 v.village_id = (:village_id)`;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 
-    const data = await sequelize.query(query, {
-      type: sequelize.QueryTypes.SELECT,
-      replacements: {
-        state_id: state_id,
-        district_id: district_id,
-        consistency_id: consistency_id,
-        mandal_id: mandal_id,
-        division_id: division_id,
-        sachivalayam_id: sachivalayam_id,
-        part_no: part_no,
-        village_id: village_id,
-      },
-    });
+		const data = await sequelize.query(query, {
+			type: sequelize.QueryTypes.SELECT,
+			replacements: {
+				state_id: state_id,
+				district_id: district_id,
+				consistency_id: consistency_id,
+				mandal_id: mandal_id,
+				division_id: division_id,
+				sachivalayam_id: sachivalayam_id,
+				part_no: part_no,
+				village_id: village_id,
+			},
+		});
 
-    const totalVoters = data.length;
-    const surveysDone = data.filter(
-      (item) => item.is_newregistration == 0 && item.intrested_party !== null
-    ).length;
-    const newVoterRegistration = data.filter(
-      (item) => item.is_newregistration == 1 && item.intrested_party == null
-    ).length;
-    return res.status(200).json({
-      message: {
-        totalVoters: totalVoters,
-        survey: {
-          surveysDone: surveysDone,
-          surveysNotDone: totalVoters - surveysDone,
-        },
-        opnion_votes: {
-          neutral: data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.intrested_party == 22
-          ).length,
-          ysrcp: data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.intrested_party == 23
-          ).length,
-          tdp: data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.intrested_party == 24
-          ).length,
-          congress: data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.intrested_party == 25
-          ).length,
-          bjp: data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.intrested_party == 26
-          ).length,
-          janasena: data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.intrested_party == 27
-          ).length,
-          others: data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.intrested_party == 80
-          ).length,
-        },
-        gender: {
-          male: data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.gender == 13
-          ).length,
-          female: data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.gender == 14
-          ).length,
-          tg: data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.gender == 15
-          ).length,
-        },
-        age: {
-          "18-25": data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.voter_age >= 18 &&
-              item.voter_age <= 25
-          ).length,
-          "26-35": data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.voter_age >= 26 &&
-              item.voter_age <= 35
-          ).length,
-          "36-45": data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.voter_age >= 36 &&
-              item.voter_age <= 45
-          ).length,
-          "46-55": data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.voter_age >= 46 &&
-              item.voter_age <= 55
-          ).length,
-          "56-65": data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.voter_age >= 56 &&
-              item.voter_age <= 65
-          ).length,
-          "66-66+": data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.voter_age >= 66
-          ).length,
-        },
-        residential: {
-          residential: data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.is_resident == 1
-          ).length,
-          nonresidential: data.filter(
-            (item) =>
-              item.is_newregistration == 0 &&
-              item.intrested_party !== null &&
-              item.is_resident == 0
-          ).length,
-        },
-        registrations: {
-          new: newVoterRegistration,
-          pending: newVoterRegistration,
-          resolved: 0,
-        },
-        data: data,
-      },
-    });
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
+		const totalVoters = data.length;
+		const surveysDone = data.filter((item) => item.is_newregistration == 0 && item.intrested_party !== null).length;
+		const newVoterRegistration = data.filter(
+			(item) => item.is_newregistration == 1 && item.intrested_party == null
+		).length;
+		return res.status(200).json({
+			message: {
+				totalVoters: totalVoters,
+				survey: {
+					surveysDone: surveysDone,
+					surveysNotDone: totalVoters - surveysDone,
+				},
+				opnion_votes: {
+					neutral: data.filter(
+						(item) =>
+							item.is_newregistration == 0 && item.intrested_party !== null && item.intrested_party == 22
+					).length,
+					ysrcp: data.filter(
+						(item) =>
+							item.is_newregistration == 0 && item.intrested_party !== null && item.intrested_party == 23
+					).length,
+					tdp: data.filter(
+						(item) =>
+							item.is_newregistration == 0 && item.intrested_party !== null && item.intrested_party == 24
+					).length,
+					congress: data.filter(
+						(item) =>
+							item.is_newregistration == 0 && item.intrested_party !== null && item.intrested_party == 25
+					).length,
+					bjp: data.filter(
+						(item) =>
+							item.is_newregistration == 0 && item.intrested_party !== null && item.intrested_party == 26
+					).length,
+					janasena: data.filter(
+						(item) =>
+							item.is_newregistration == 0 && item.intrested_party !== null && item.intrested_party == 27
+					).length,
+					others: data.filter(
+						(item) =>
+							item.is_newregistration == 0 && item.intrested_party !== null && item.intrested_party == 80
+					).length,
+				},
+				gender: {
+					male: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.gender == 13
+					).length,
+					female: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.gender == 14
+					).length,
+					tg: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.gender == 15
+					).length,
+				},
+				age: {
+					'18-25': data.filter(
+						(item) =>
+							item.is_newregistration == 0 &&
+							item.intrested_party !== null &&
+							item.voter_age >= 18 &&
+							item.voter_age <= 25
+					).length,
+					'26-35': data.filter(
+						(item) =>
+							item.is_newregistration == 0 &&
+							item.intrested_party !== null &&
+							item.voter_age >= 26 &&
+							item.voter_age <= 35
+					).length,
+					'36-45': data.filter(
+						(item) =>
+							item.is_newregistration == 0 &&
+							item.intrested_party !== null &&
+							item.voter_age >= 36 &&
+							item.voter_age <= 45
+					).length,
+					'46-55': data.filter(
+						(item) =>
+							item.is_newregistration == 0 &&
+							item.intrested_party !== null &&
+							item.voter_age >= 46 &&
+							item.voter_age <= 55
+					).length,
+					'56-65': data.filter(
+						(item) =>
+							item.is_newregistration == 0 &&
+							item.intrested_party !== null &&
+							item.voter_age >= 56 &&
+							item.voter_age <= 65
+					).length,
+					'66-66+': data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.voter_age >= 66
+					).length,
+				},
+				residential: {
+					residential: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.is_resident == 1
+					).length,
+					nonresidential: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.is_resident == 0
+					).length,
+				},
+				registrations: {
+					new: newVoterRegistration,
+					pending: newVoterRegistration,
+					resolved: 0,
+				},
+				data: data,
+			},
+		});
+	} catch (e) {
+		return res.status(500).json({ error: e.message });
+	}
 }
 
 module.exports = {
-  getById,
-  getAll,
-  create,
-  save_or_updated_survey,
-  updateById,
-  deletedById,
-  getAllWithJoin,
-  getOpininoPollDashboardByJoinWhere,
-  getOpinionReports,
+	getById,
+	getAll,
+	create,
+	save_or_updated_survey,
+	updateById,
+	deletedById,
+	getAllWithJoin,
+	getOpininoPollDashboardByJoinWhere,
+	getOpinionReports,
 };

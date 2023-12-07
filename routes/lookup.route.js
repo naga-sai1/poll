@@ -7,15 +7,8 @@ router.post('/lookup/', controller.create);
 router.put('/lookup/:id', controller.updateById);
 router.delete('/lookup/:id', controller.deletedById);
 
-<<<<<<< Updated upstream
-router.post("/getAllReligion", controller.getAllReligion);
-router.post("/getAllCastes", controller.getAllCastes);
-router.post("/getalldesignations", controller.getAllDesignations);
-router.post("/getallparties", controller.getAllParties);
-=======
 router.post('/getAllReligion', controller.getAllReligion);
 router.post('/getAllCastes', controller.getAllCastes);
 router.post('/getalldesignations', controller.getAllDesignations);
->>>>>>> Stashed changes
 
 module.exports = router;
