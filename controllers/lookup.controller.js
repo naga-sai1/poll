@@ -86,6 +86,26 @@ async function getAllDesignations(req, res){
 	}
 }
 
+//get all party's
+async function getAllPartys(req, res){
+  try {
+		const { sequelize } = await connectToDatabase();
+
+		var query = `
+    SELECT *, l.lookup_valuename as party_name
+    FROM lookup l
+    WHERE lookup_pk BETWEEN 22 AND 27`;
+
+		const data = await sequelize.query(query, {
+			type: sequelize.QueryTypes.SELECT,
+		});
+
+		return res.status(200).json({ message: data });
+	} catch (err) {
+		return res.status(500).json({ error: err.message });
+	}
+}
+
 
 //get a single lookup
 async function getById(req, res) {
@@ -141,4 +161,5 @@ async function updateById(req, res) {
     updateById,
     deletedById,
     getAllDesignations,
+    getAllPartys,
   };
