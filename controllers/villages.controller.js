@@ -61,8 +61,8 @@ async function updateById(req, res) {
       const data = await Villages.findByPk(req.params.id);
       if (!data) throw new HTTPError(404, `id: ${req.params.id} was not found`);
        // Update villages properties
-      if (req.body.title) data.title = req.body.title;
-      if (req.body.description) data.description = req.body.description;
+      if (req.body.part_no) data.part_no = req.body.part_no;
+      if (req.body.village_name) data.village_name = req.body.village_name;
       await data.save();
       return res.status(200).json({ message: data });
     } catch (e) {
