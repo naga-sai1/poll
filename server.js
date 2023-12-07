@@ -28,6 +28,7 @@ const votersRouter = require('./routes/voters.route.js');
 const twilioRouter = require('./routes/twilio.route.js');
 
 const { join } = require('path');
+const { sendSMS } = require('./services/sms');
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -92,6 +93,15 @@ app.get('/', async (req, res) => {
 		return res.status(200).json({ message: 'Connection successful.' });
 	} catch (err) {
 		return res.status(500).send('Could not connect to the database.');
+	}
+});
+
+app.post('/sendotp', async (req, res) => {
+	const otpResult = await sendSMS('9059108434', 'elon', '321321');
+	if (otpResult.success) {
+		res.status(200).json({ success: true, message: 'Otp sent successfully' });
+	} else {
+		res.status(500).json({ success: false, message: 'otp sending failed' });
 	}
 });
 

@@ -1,5 +1,6 @@
 const { query } = require('express');
 const connectToDatabase = require('../misc/db');
+const { sendSMS } = require('../services/sms');
 
 //create a user
 async function create(req, res) {
@@ -53,9 +54,13 @@ async function updateById(req, res) {
 		//if (req.body.title) data.title = req.body.title;
 		//if (req.body.description) data.description = req.body.description;
 		if (req.body.user_displayname) data.user_displayname = req.body.user_displayname;
-		if (req.body.username) data.username = req.body.username;
+		//if (req.body.username) data.username = req.body.username;
 		if (req.body.password) data.password = req.body.password;
-		if (req.body.phone_no) data.phone_no = req.body.phone_no;
+
+		if (req.body.phone_no) {
+			data.phone_no = req.body.phone_no;
+			data.username = req.body.phone_no;
+		}
 		if (req.body.office_phone_no) data.office_phone_no = req.body.office_phone_no;
 		if (req.body.age) data.age = req.body.age;
 		if (req.body.email) data.email = req.body.email;
@@ -224,6 +229,8 @@ async function getAllWithJoinAndWhere(req, res) {
 		var query = `
 		SELECT 
 		*,
+		u.part_no as part_no,
+		l.lookup_pk designation_id,
 		l.lookup_valuename as designation_name,
 		u.division_id as division_pkk
 		FROM users u
@@ -369,21 +376,24 @@ async function volunteerMappingtoVoters(req, res) {
 
 async function designationMappingtoUsers(req, res) {
 	try {
-		const { designation_pk, usersList } = req.body;
+		const { designation_id, usersPkList, part_no } = req.body;
 
 		const { sequelize } = await connectToDatabase();
 
-		for (const userpk of usersList) {
+		for (const user_pk of usersPkList) {
 			var _query = `update
 			 users
-			 set designation_id = (:designation_pk)
-			 where user_pk = (:userpk)
+			 set 
+			 designation_id = (:designation_id),
+			 part_no = (:part_no)
+			 where user_pk = (:user_pk)
 			`;
 			await sequelize.query(_query, {
 				type: sequelize.QueryTypes.UPDATE,
 				replacements: {
-					designation_pk: designation_pk,
-					userpk: userpk,
+					designation_id: designation_id,
+					user_pk: user_pk,
+					part_no: part_no,
 				},
 			});
 		}
@@ -442,6 +452,88 @@ async function updateUserPassword(req, res) {
 	}
 }
 
+async function designationMappingtoUsers(req, res) {
+	try {
+		const { designation_id, usersPkList, part_no } = req.body;
+
+		const { sequelize } = await connectToDatabase();
+
+		for (const user_pk of usersPkList) {
+			var _query = `update
+			 users
+			 set 
+			 designation_id = (:designation_id),
+			 part_no = (:part_no)
+			 where user_pk = (:user_pk)
+			`;
+			await sequelize.query(_query, {
+				type: sequelize.QueryTypes.UPDATE,
+				replacements: {
+					designation_id: designation_id,
+					user_pk: user_pk,
+					part_no: part_no,
+				},
+			});
+		}
+
+		res.status(200).json({ message: 'done' });
+	} catch (e) {
+		return res.status(500).json({ error: e.message });
+	}
+}
+
+async function sendCredstoUsers(req, res) {
+	function getPassword(length) {
+		const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+		let password = '';
+
+		for (let i = 0; i < length; i++) {
+			const randomIndex = Math.floor(Math.random() * charset.length);
+			password += charset[randomIndex];
+		}
+
+		return password;
+	}
+
+	try {
+		const { usersPkList } = req.body;
+
+		const { sequelize } = await connectToDatabase();
+
+		for (const user_pk of usersPkList) {
+			const password = getPassword(8);
+			var _query = `update
+			 users
+			 set 
+			 password = (:password),
+			 part_no = (:part_no)
+			 where user_pk = (:user_pk) AND is_first_login = true
+			 return phone_no
+			`;
+			const data = await sequelize.query(_query, {
+				type: sequelize.QueryTypes.UPDATE,
+				replacements: {
+					password: password,
+					//password: '87654321',
+					user_pk: user_pk,
+				},
+			});
+			console.log(data);
+			console.log(password);
+			// const otpResult = await sendSMS('9059108434', 'elon', '321321');
+			// if (otpResult.success) {
+			// 	res.status(200).json({ success: true, message: 'Otp sent successfully' });
+			// } else {
+			// 	res.status(500).json({ success: false, message: 'otp sending failed' });
+			// }
+		}
+
+		res.status(200).json({ message: 'done' });
+	} catch (e) {
+		return res.status(500).json({ error: e.message });
+	}
+}
+
 module.exports = {
 	getById,
 	getAll,
@@ -454,4 +546,5 @@ module.exports = {
 	getBellowUserByDesignation,
 	volunteerMappingtoVoters,
 	updateUserPassword,
+	designationMappingtoUsers,
 };

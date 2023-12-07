@@ -9,10 +9,11 @@ router.put('/users/:id', controller.updateById);
 router.delete('/users/:id', controller.deletedById);
 
 //join queries
-router.get('/getalluserswithjoin', controller.getAllWithJoin);
+router.post('/getalluserswithjoin', controller.getAllWithJoin);
 router.post('/getalluserswithjoinandwhere', controller.getAllWithJoinAndWhere);
 router.post('/getallbellowuser', controller.getBellowUserByDesignation);
 
 router.post('/updateuserpassword', controller.updateUserPassword);
+router.post('/designationmappingtousers', controller.designationMappingtoUsers);
 
 module.exports = router;
