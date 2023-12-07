@@ -10,7 +10,7 @@ router.delete("/lookup/:id", controller.deletedById);
 router.get("/getAllReligion", controller.getAllReligion);
 router.get("/getAllCastes", controller.getAllCastes);
 router.get("/getalldesignations", controller.getAllDesignations);
-router.get("/getallpartys", controller.getAllPartys);
+router.get("/getallparties", controller.getAllParties);
 
 
 module.exports = router;

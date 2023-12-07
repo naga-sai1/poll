@@ -86,8 +86,8 @@ async function getAllDesignations(req, res){
 	}
 }
 
-//get all party's
-async function getAllPartys(req, res){
+//get all parties
+async function getAllParties(req, res){
   try {
 		const { sequelize } = await connectToDatabase();
 
@@ -161,5 +161,5 @@ async function updateById(req, res) {
     updateById,
     deletedById,
     getAllDesignations,
-    getAllPartys,
+    getAllParties,
   };
