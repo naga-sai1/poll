@@ -61,8 +61,8 @@ async function updateById(req, res) {
 		const data = await Sachivalayam.findByPk(req.params.id);
 		if (!data) throw new HTTPError(404, `id: ${req.params.id} was not found`);
 		// Update sachivalayam properties
-		if (req.body.title) data.title = req.body.title;
-		if (req.body.description) data.description = req.body.description;
+		if (req.body.division_id) data.division_id = req.body.division_id;
+		if (req.body.sachivalayam_name) data.sachivalayam_name = req.body.sachivalayam_name;
 		await data.save();
 		return res.status(200).json({ message: data });
 	} catch (e) {
