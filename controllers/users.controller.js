@@ -596,9 +596,9 @@ async function sendCredstoUsers(req, res) {
 					user_pk: user.user_pk,
 				},
 			});
-			console.log(user.phone_no);
-			console.log(user.user_displayname);
-			console.log(password);
+			// console.log(user.phone_no);
+			// console.log(user.user_displayname);
+			// console.log(password);
 			const otpResult = await sendSMS(user.phone_no, user.user_displayname, password);
 			if (otpResult.success) {
 				console.log('Otp sent successfully');
