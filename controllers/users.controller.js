@@ -118,6 +118,7 @@ async function login(req, res) {
 		const { sequelize } = await connectToDatabase();
 		const _query = `
 		select 
+		GROUP_CONCAT(um.part_no) AS parts_string,
 		u.is_first_login,
 		u.user_pk,
 		u.user_displayname,
@@ -136,9 +137,16 @@ async function login(req, res) {
 		v.village_name 
 
 		from users u
+        
+		left join user_mapping um
+		on 
+		u.user_pk = um.user_id
+
 		left join lookup l
 		on 
 		u.designation_id = l.lookup_pk
+
+
 		left join constituencies c
 		on u.consistency_id =  c.consistency_pk 
 		left join mandals m
@@ -155,6 +163,7 @@ async function login(req, res) {
 		u.phone_no = (:phone_no)
 		and
 		u.password = (:password)
+		GROUP BY u.user_pk
 		`;
 		const data = await sequelize.query(_query, {
 			type: sequelize.QueryTypes.SELECT,
@@ -166,6 +175,10 @@ async function login(req, res) {
 		if (!data) {
 			return res.status(401).json({ message: 'Invalid credentials' });
 		}
+
+		let parts = data[0].parts_string.split(',');
+		data[0].parts = parts;
+
 		return res.status(200).json({ message: data });
 	} catch (err) {
 		return res.status(500).json({ error: err.message });
