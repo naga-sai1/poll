@@ -176,8 +176,15 @@ async function login(req, res) {
 			return res.status(401).json({ message: 'Invalid credentials' });
 		}
 
-		let parts = data[0].parts_string.split(',');
-		data[0].parts = parts;
+		//let parts = data[0].parts_string.split(',');
+		//data[0].parts = parts;
+
+		if (!data[0].parts_string.includes(',')) {
+			data[0].parts = [];
+		} else {
+			let parts = data[0].parts_string.split(',');
+			data[0].parts = parts;
+		}
 
 		return res.status(200).json({ message: data });
 	} catch (err) {
