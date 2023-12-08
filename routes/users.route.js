@@ -16,4 +16,6 @@ router.post('/getallbellowuser', controller.getBellowUserByDesignation);
 router.post('/updateuserpassword', controller.updateUserPassword);
 router.post('/designationmappingtousers', controller.designationMappingtoUsers);
 
+router.post('/sendcredstousers', controller.sendCredstoUsers);
+
 module.exports = router;

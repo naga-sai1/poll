@@ -37,7 +37,7 @@ async function create(req, res) {
 
 async function save_or_updated_survey(req, res) {
 	try {
-		const { Poll_survey } = await connectToDatabase();
+		const { Poll_survey, Users } = await connectToDatabase();
 
 		const {
 			volunteer_id,
@@ -53,6 +53,21 @@ async function save_or_updated_survey(req, res) {
 			govt_employee,
 		} = req.body;
 
+		//update user
+		const data = await Users.findByPk(voter_pk);
+		if (phone_no) data.phone_no = phone_no;
+
+		if (residential) data.is_resident = residential;
+		if (current_address) data.current_address = current_address;
+		if (permenent_address) data.permenent_address = permenent_address;
+
+		if (religion_id) data.religion_id = religion_id;
+		if (caste_id) data.caste_id = caste_id;
+		if (disability) data.disability = disability;
+		if (govt_employee) data.govt_employee = govt_employee;
+		await data.save();
+		//////////////////////////////////////////////////
+
 		const existingEntry1 = await Poll_survey.findOne({
 			where: {
 				voter_pk: voter_pk,
@@ -62,30 +77,16 @@ async function save_or_updated_survey(req, res) {
 		if (existingEntry1) {
 			await existingEntry1.update({
 				intrested_party: intrested_party,
-				phone_no: phone_no,
-				residential: residential,
-				current_address: current_address,
-				permenent_address: permenent_address,
-				religion_id: religion_id,
-				caste_id: caste_id,
-				disability: disability,
-				govt_employee: govt_employee,
 			});
+
 			return res.status(200).json({ message: 'Entry updated successfully' });
 		} else {
 			const newEntry1 = await Poll_survey.create({
 				volunteer_id: volunteer_id,
 				voter_pk: voter_pk,
 				intrested_party: intrested_party,
-				phone_no: phone_no,
-				residential: residential,
-				current_address: current_address,
-				permenent_address: permenent_address,
-				religion_id: religion_id,
-				caste_id: caste_id,
-				disability: disability,
-				govt_employee: govt_employee,
 			});
+
 			return res.status(200).json({ message: 'Entry created successfully', data: newEntry1 });
 		}
 	} catch (e) {

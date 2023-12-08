@@ -19,11 +19,12 @@ module.exports = (sequelize, DataTypes) => {
 			state_id: DataTypes.INTEGER,
 			consistency_id: DataTypes.INTEGER,
 			mandal_id: DataTypes.INTEGER,
-			division_id : DataTypes.INTEGER,
+			division_id: DataTypes.INTEGER,
 			sachivalayam_id: DataTypes.INTEGER,
 			village_id: DataTypes.INTEGER,
 			district_id: DataTypes.INTEGER,
 			part_no: DataTypes.INTEGER,
+			is_first_login: DataTypes.BOOLEAN,
 		},
 		{
 			tableName: 'users',

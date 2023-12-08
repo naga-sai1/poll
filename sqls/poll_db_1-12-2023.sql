@@ -466,6 +466,21 @@ CREATE TABLE notifications (
 );
 
 
+CREATE TABLE user_mapping (
+    user_mapping_pk INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    part_no INT NOT NULL,
+    is_active BOOLEAN DEFAULT true,
+    createdon TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedon TIMESTAMP DEFAULT NULL,
+    deletedon TIMESTAMP DEFAULT NULL,
+    createdby INT NOT NULL,
+    updatedby INT DEFAULT NULL,
+    deletedby INT DEFAULT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_pk),
+    FOREIGN KEY (part_no) REFERENCES parts(part_no)
+);
+
 
 
 
