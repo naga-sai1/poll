@@ -172,9 +172,8 @@ async function getAllWithJoinAndWhere(req, res) {
 
 		var query = `
 		SELECT *, 
-		v.phone_no as voter_phone_no ,
-		v.phone_no as survey_phone_no,
-		v.age as voter_age , v.voter_pk as voter_pkk,
+		v.age as voter_age , 
+		 v.voter_pk as voter_pkk,
 		(SELECT lookup_valuename FROM lookup WHERE lookup_pk = v.caste_id) AS caste_name,
 		(SELECT lookup_valuename FROM lookup WHERE lookup_pk = v.religion_id) AS religion_name,
 		(SELECT lookup_valuename FROM lookup WHERE lookup_pk = v.guardian) AS guardian_type,

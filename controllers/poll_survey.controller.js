@@ -37,14 +37,14 @@ async function create(req, res) {
 
 async function save_or_updated_survey(req, res) {
 	try {
-		const { Poll_survey, Users } = await connectToDatabase();
+		const { Poll_survey, Voters } = await connectToDatabase();
 
 		const {
 			volunteer_id,
 			voter_pk,
 			intrested_party,
 			phone_no,
-			residential,
+			is_resident,
 			current_address,
 			permenent_address,
 			religion_id,
@@ -53,11 +53,12 @@ async function save_or_updated_survey(req, res) {
 			govt_employee,
 		} = req.body;
 
+		console.log(req.body);
 		//update user
-		const data = await Users.findByPk(voter_pk);
+		const data = await Voters.findByPk(voter_pk);
 		if (phone_no) data.phone_no = phone_no;
 
-		if (residential) data.is_resident = residential;
+		if (is_resident) data.is_resident = is_resident;
 		if (current_address) data.current_address = current_address;
 		if (permenent_address) data.permenent_address = permenent_address;
 
@@ -87,9 +88,10 @@ async function save_or_updated_survey(req, res) {
 				intrested_party: intrested_party,
 			});
 
-			return res.status(200).json({ message: 'Entry created successfully', data: newEntry1 });
+			return res.status(200).json({ message: 'Entry created successfully' });
 		}
 	} catch (e) {
+		console.log(e);
 		return res.status(500).json({ error: e.message });
 	}
 }
