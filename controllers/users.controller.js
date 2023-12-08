@@ -179,7 +179,7 @@ async function login(req, res) {
 		//let parts = data[0].parts_string.split(',');
 		//data[0].parts = parts;
 
-		if (!data[0].parts_string.includes(',')) {
+		if (data[0].parts_string == null) {
 			data[0].parts = [];
 		} else {
 			let parts = data[0].parts_string.split(',');
