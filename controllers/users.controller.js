@@ -118,6 +118,7 @@ async function login(req, res) {
 		const { sequelize } = await connectToDatabase();
 		const _query = `
 		select 
+		GROUP_CONCAT(um.part_no) AS parts_string,
 		u.is_first_login,
 		u.user_pk,
 		u.user_displayname,
@@ -136,9 +137,16 @@ async function login(req, res) {
 		v.village_name 
 
 		from users u
+        
+		left join user_mapping um
+		on 
+		u.user_pk = um.user_id
+
 		left join lookup l
 		on 
 		u.designation_id = l.lookup_pk
+
+
 		left join constituencies c
 		on u.consistency_id =  c.consistency_pk 
 		left join mandals m
@@ -155,6 +163,7 @@ async function login(req, res) {
 		u.phone_no = (:phone_no)
 		and
 		u.password = (:password)
+		GROUP BY u.user_pk
 		`;
 		const data = await sequelize.query(_query, {
 			type: sequelize.QueryTypes.SELECT,
@@ -166,6 +175,17 @@ async function login(req, res) {
 		if (!data) {
 			return res.status(401).json({ message: 'Invalid credentials' });
 		}
+
+		//let parts = data[0].parts_string.split(',');
+		//data[0].parts = parts;
+
+		if (data[0].parts_string == null) {
+			data[0].parts = [];
+		} else {
+			let parts = data[0].parts_string.split(',');
+			data[0].parts = parts;
+		}
+
 		return res.status(200).json({ message: data });
 	} catch (err) {
 		return res.status(500).json({ error: err.message });
@@ -228,14 +248,18 @@ async function getAllWithJoinAndWhere(req, res) {
 
 		var query = `
 		SELECT 
+		
 		*,
+		GROUP_CONCAT(um.part_no) AS parts,
 		u.part_no as part_no,
 		l.lookup_pk designation_id,
 		l.lookup_valuename as designation_name,
 		u.division_id as division_pkk
 		FROM users u
+        
+		left JOIN user_mapping um ON 
+		u.user_pk = um.user_id
 
-		
         
 		left join lookup l on
         l.lookup_pk = u.designation_id
@@ -301,6 +325,8 @@ async function getAllWithJoinAndWhere(req, res) {
 				}
 			}
 		}
+
+		query += `GROUP BY u.user_pk`;
 
 		const data = await sequelize.query(query, {
 			type: sequelize.QueryTypes.SELECT,
@@ -452,28 +478,79 @@ async function updateUserPassword(req, res) {
 	}
 }
 
+// async function designationMappingtoUsers2(req, res) {
+// 	try {
+// 		const { designation_id, usersPkList, part_no } = req.body;
+
+// 		const { sequelize } = await connectToDatabase();
+
+// 		for (const user_pk of usersPkList) {
+// 			var _query = `update
+// 			 users
+// 			 set
+// 			 designation_id = (:designation_id),
+// 			 part_no = (:part_no)
+// 			 where user_pk = (:user_pk)
+// 			`;
+// 			await sequelize.query(_query, {
+// 				type: sequelize.QueryTypes.UPDATE,
+// 				replacements: {
+// 					designation_id: designation_id,
+// 					user_pk: user_pk,
+// 					part_no: part_no,
+// 				},
+// 			});
+// 		}
+
+// 		res.status(200).json({ message: 'done' });
+// 	} catch (e) {
+// 		return res.status(500).json({ error: e.message });
+// 	}
+// }
+
 async function designationMappingtoUsers(req, res) {
 	try {
-		const { designation_id, usersPkList, part_no } = req.body;
+		const { designation_id, usersPkList, part_no_List } = req.body;
 
 		const { sequelize } = await connectToDatabase();
 
 		for (const user_pk of usersPkList) {
-			var _query = `update
-			 users
-			 set 
-			 designation_id = (:designation_id),
-			 part_no = (:part_no)
-			 where user_pk = (:user_pk)
-			`;
+			var _query = `
+			UPDATE users
+			SET designation_id = (:designation_id)
+			WHERE user_pk = (:user_pk)`;
+
 			await sequelize.query(_query, {
 				type: sequelize.QueryTypes.UPDATE,
 				replacements: {
 					designation_id: designation_id,
 					user_pk: user_pk,
-					part_no: part_no,
 				},
 			});
+
+			var _query = `DELETE FROM user_mapping
+			WHERE user_id = (:user_pk)`;
+
+			await sequelize.query(_query, {
+				type: sequelize.QueryTypes.DELETE,
+				replacements: {
+					user_pk: user_pk,
+				},
+			});
+
+			for (const part_no of part_no_List) {
+				var _query = `
+				INSERT INTO user_mapping (user_id, part_no)
+				VALUES (:user_pk, :part_no);
+			`;
+				await sequelize.query(_query, {
+					type: sequelize.QueryTypes.UPDATE,
+					replacements: {
+						user_pk: user_pk,
+						part_no: part_no,
+					},
+				});
+			}
 		}
 
 		res.status(200).json({ message: 'done' });
@@ -496,36 +573,38 @@ async function sendCredstoUsers(req, res) {
 	}
 
 	try {
-		const { usersPkList } = req.body;
+		console.log(req.body);
+		const { usersList } = req.body;
 
 		const { sequelize } = await connectToDatabase();
 
-		for (const user_pk of usersPkList) {
+		for (const user of usersList) {
+			console.log(user);
 			const password = getPassword(8);
-			var _query = `update
+			var _query = `
+			 update
 			 users
 			 set 
-			 password = (:password),
-			 part_no = (:part_no)
-			 where user_pk = (:user_pk) AND is_first_login = true
-			 return phone_no
+			 password = :password
+			 where user_pk = :user_pk AND is_first_login = true
 			`;
 			const data = await sequelize.query(_query, {
 				type: sequelize.QueryTypes.UPDATE,
 				replacements: {
 					password: password,
 					//password: '87654321',
-					user_pk: user_pk,
+					user_pk: user.user_pk,
 				},
 			});
-			console.log(data);
-			console.log(password);
-			// const otpResult = await sendSMS('9059108434', 'elon', '321321');
-			// if (otpResult.success) {
-			// 	res.status(200).json({ success: true, message: 'Otp sent successfully' });
-			// } else {
-			// 	res.status(500).json({ success: false, message: 'otp sending failed' });
-			// }
+			// console.log(user.phone_no);
+			// console.log(user.user_displayname);
+			// console.log(password);
+			const otpResult = await sendSMS(user.phone_no, user.user_displayname, password);
+			if (otpResult.success) {
+				console.log('Otp sent successfully');
+			} else {
+				console.log('otp sending failed');
+			}
 		}
 
 		res.status(200).json({ message: 'done' });
@@ -547,4 +626,5 @@ module.exports = {
 	volunteerMappingtoVoters,
 	updateUserPassword,
 	designationMappingtoUsers,
+	sendCredstoUsers,
 };

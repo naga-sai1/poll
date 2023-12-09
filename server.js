@@ -97,7 +97,7 @@ app.get('/', async (req, res) => {
 });
 
 app.post('/sendotp', async (req, res) => {
-	const otpResult = await sendSMS('9059108434', 'elon', '321321');
+	const otpResult = await sendSMS('9059108434', 'Vijay, Weclome to YSRC Survey.', '321321');
 	if (otpResult.success) {
 		res.status(200).json({ success: true, message: 'Otp sent successfully' });
 	} else {
