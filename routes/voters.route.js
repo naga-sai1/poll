@@ -8,7 +8,7 @@ router.put('/voters/:id', controller.updateById);
 router.delete('/voters/:id', controller.deletedById);
 
 //join queries
-router.get('/getallvoterswithjoin', controller.getAllWithJoin);
+//router.get('/getallvoterswithjoin', controller.getAllWithJoin);
 router.post('/getallvoterswithjoinandwhere', controller.getAllWithJoinAndWhere);
 
 router.post('/updatevoteraddress', controller.updateVoterAddress);

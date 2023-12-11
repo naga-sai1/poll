@@ -15,7 +15,6 @@ const navaratnaluRouter = require('./routes/navaratnalu.route.js');
 const Page_accessRouter = require('./routes/page_access.route.js');
 const PartsRouter = require('./routes/parts.route.js');
 const statesRouter = require('./routes/states.route.js');
-//const boothsRouter = require('./routes/booths.route.js');
 const access_permisionRouter = require('./routes/access_permissions.route.js');
 const poll_surveyRouter = require('./routes/poll_survey.route.js');
 const sachivalayamRouter = require('./routes/sachivalayam.route.js');
