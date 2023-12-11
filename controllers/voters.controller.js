@@ -222,28 +222,28 @@ async function getAllWithJoinAndWhere(req, res) {
 	AND 
     v.state_id = (:state_id)`;
 
-		if (district_id != null && district_id != '') {
-			query += `AND
+    if (district_id != null && district_id != "") {
+      query += `AND
     v.district_id = (:district_id)`;
 
-			if (consistency_id != null && consistency_id != '') {
-				query += `AND
+      if (consistency_id != null && consistency_id != "") {
+        query += `AND
       v.consistency_id = (:consistency_id)`;
 
-				if (mandal_id != null && mandal_id != '') {
-					query += `AND
+        if (mandal_id != null && mandal_id != "") {
+          query += `AND
         v.mandal_id = (:mandal_id)`;
 
-					if (division_id != null && division_id != '') {
-						query += `AND
+          if (division_id != null && division_id != "") {
+            query += `AND
           v.division_id = (:division_id)`;
 
-						if (sachivalayam_id != null && sachivalayam_id != '') {
-							query += `AND
+            if (sachivalayam_id != null && sachivalayam_id != "") {
+              query += `AND
             v.sachivalayam_id = (:sachivalayam_id)`;
 
-							if (part_no != null && part_no != '') {
-								query += `AND
+              if (part_no != null && part_no != "") {
+                query += `AND
               v.part_no = (:part_no)`;
 
 								if (village_id != null && village_id != '') {
@@ -320,7 +320,6 @@ async function votersMappingtogruhasaradhi(req, res) {
 
 module.exports = {
 	getById,
-	getAll,
 	create,
 	updateById,
 	deletedById,
