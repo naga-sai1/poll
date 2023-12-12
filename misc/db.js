@@ -23,21 +23,21 @@ const VillagesModel = require('../models/villages');
 const VotersModel = require('../models/voters');
 const VoterMappingModel = require('../models/voter_mapping');
 
-// const sequelize = new Sequelize('u276789778_polling_survey', 'u276789778_polling_survey', '123@Mango', {
-// 	dialect: 'mysql',
-// 	host: '62.72.28.52',
-// 	port: 3306,
-// 	//logging: true,
-// 	logging: false,
-// });
-
-const sequelize = new Sequelize('AppPollSurvey', 'admin', 'admin1234', {
+const sequelize = new Sequelize('u276789778_polling_survey', 'u276789778_polling_survey', '123@Mango', {
 	dialect: 'mysql',
-	host: 'apppollsurveydev.cligvr4maf1p.us-east-1.rds.amazonaws.com',
+	host: '62.72.28.52',
 	port: 3306,
 	//logging: true,
 	logging: false,
 });
+
+// const sequelize = new Sequelize('AppPollSurvey', 'admin', 'admin1234', {
+// 	dialect: 'mysql',
+// 	host: 'apppollsurveydev.cligvr4maf1p.us-east-1.rds.amazonaws.com',
+// 	port: 3306,
+// 	//logging: true,
+// 	logging: false,
+// });
 
 const VoterMapping = VoterMappingModel(sequelize, Sequelize);
 const Country = CountryModel(sequelize, Sequelize);

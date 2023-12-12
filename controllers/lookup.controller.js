@@ -106,6 +106,27 @@ async function getAllParties(req, res) {
 	}
 }
 
+//get a ticket status list
+async function getTicketStatus(req, res) {
+	try {
+		const { sequelize } = await connectToDatabase();
+
+		var query = `
+    SELECT *, l.lookup_valuename as ticket_status
+    FROM lookup l
+    WHERE lookup_name = "ticketstatuslist"`;
+
+		const data = await sequelize.query(query, {
+			type: sequelize.QueryTypes.SELECT,
+		});
+
+		return res.status(200).json({ message: data });
+	} catch (err) {
+		return res.status(500).json({ error: err.message });
+	}
+}
+
+
 //get a single lookup
 async function getById(req, res) {
 	try {
@@ -160,4 +181,5 @@ module.exports = {
 	deletedById,
 	getAllDesignations,
 	getAllParties,
+	getTicketStatus,
 };

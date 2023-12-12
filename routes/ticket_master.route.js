@@ -9,5 +9,8 @@ router.delete('/ticket_master/:id', controller.deletedById);
 
 //join queries
 router.get('/getallticketmasterwithjoin', controller.getAllWithJoin);
+router.put('/updateticketstatus/', controller.updateTicketStatus);
+
+router.post('/getallticketswithjoinandwhere', controller.getAllWithJoinAndWhere);
 
 module.exports = router;

@@ -348,6 +348,8 @@ async function getAllWithJoinAndWhere(req, res) {
 	}
 }
 
+
+//get bellow user by designation
 async function getBellowUserByDesignation(req, res) {
 	try {
 		const { sequelize } = await connectToDatabase();
@@ -373,6 +375,7 @@ async function getBellowUserByDesignation(req, res) {
 	}
 }
 
+//volunteer mapping to voters
 async function volunteerMappingtoVoters(req, res) {
 	try {
 		const { user_pk, voterspkList } = req.body;
@@ -614,6 +617,89 @@ async function sendCredstoUsers(req, res) {
 	}
 }
 
+//get next level user by designation
+async function getNextLevelUserByDesignation(req, res) {
+	try {
+		const { sequelize } = await connectToDatabase();
+
+		const { designation_name, part_no, sachivalayam_id, division_id, mandal_id, consistency_id } = req.body;
+
+		var query = ''
+
+		if (designation_name == 'VOLUNTEER') {
+			query = `
+			SELECT *
+			FROM users u
+	
+			left join lookup l on
+			u.designation_id = l.lookup_pk
+
+			left join parts p on
+			u.part_no = p.part_no
+
+			WHERE designation_id = 36 AND part_no = (:part_no)`;
+		} else if (designation_name == 'BOOTH_INCHARGE') {
+			query = `
+			SELECT *
+			FROM users u
+	
+			left join lookup l on
+			u.designation_id = l.lookup_pk
+
+			left join sachivalayam s on
+			u.sachivalayam_id = s.sachivalayam_pk
+
+			WHERE designation_id = 35 AND sachivalayam_id = (:sachivalayam_id)`;
+		} else if (designation_name == 'APRO') {
+			query = `
+			SELECT *
+			FROM users u
+	
+			left join lookup l on
+			u.designation_id = l.lookup_pk
+
+			left join divisions d on
+			u.division_id = d.division_pk
+
+			WHERE designation_id = 34 AND division_id = (:division_id)`;
+		} else if (designation_name == 'PRO') {
+			query = `
+			SELECT *
+			FROM users u
+	
+			left join lookup l on
+			u.designation_id = l.lookup_pk
+
+			left join mandals m on
+			u.mandal_id = m.mandal_pk
+
+			WHERE designation_id = 33 AND mandal_id = (:mandal_id)`;
+		} else if (designation_name == 'MANDAL_CONVENER/CPRO') {
+			query = `
+			SELECT *
+			FROM users u
+	
+			left join lookup l on
+			u.designation_id = l.lookup_pk
+
+			left join constituencies c on
+			u.consistency_id = c.consistency_pk
+
+			WHERE designation_id = 32 AND consistency_id = (:consistency_id)`;
+		} 
+
+		const data = await sequelize.query(query, {
+			type: sequelize.QueryTypes.SELECT,
+			replacements: { designation_name: designation_name, part_no: part_no, sachivalayam_id: sachivalayam_id, division_id: division_id, mandal_id: mandal_id, consistency_id: consistency_id },
+		});
+
+		return res.status(200).json({ message: data });
+	} catch (err) {
+		return res.status(500).json({ error: err.message });
+		console.log(err);
+	}
+}
+
 module.exports = {
 	getById,
 	getAll,
@@ -628,4 +714,5 @@ module.exports = {
 	updateUserPassword,
 	designationMappingtoUsers,
 	sendCredstoUsers,
+	getNextLevelUserByDesignation,
 };

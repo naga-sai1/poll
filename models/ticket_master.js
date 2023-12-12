@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         volunteer_id: DataTypes.INTEGER,
         navaratnalu_id: DataTypes.INTEGER,
         reason: DataTypes.STRING,
+        status_id: DataTypes.INTEGER,
       },
   
       {

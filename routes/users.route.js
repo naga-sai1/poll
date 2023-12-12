@@ -18,4 +18,6 @@ router.post('/designationmappingtousers', controller.designationMappingtoUsers);
 
 router.post('/sendcredstousers', controller.sendCredstoUsers);
 
+router.post('/getnextleveluser', controller.getNextLevelUserByDesignation);
+
 module.exports = router;
