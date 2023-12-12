@@ -1,110 +1,122 @@
-const connectToDatabase = require('../misc/db');
+const connectToDatabase = require("../misc/db");
 
 //create a voters
 async function create(req, res) {
-	try {
-		// Create the voters using the Sequelize model
-		const { Voters } = await connectToDatabase();
+  try {
+    // Create the voters using the Sequelize model
+    const { Voters } = await connectToDatabase();
 
-		const data = await Voters.create(req.body);
-		return res.status(200).json({ message: data });
-	} catch (e) {
-		return res.status(500).json({ error: e.message });
-	}
+    const data = await Voters.create(req.body);
+    return res.status(200).json({ message: data });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
 }
 
 //get all voters
 async function getAll(req, res) {
-	try {
-		// Retrieve all voters using the Sequelize model
-		const { Voters } = await connectToDatabase();
-		console.log('all voters');
+  try {
+    // Retrieve all voters using the Sequelize model
+    const { Voters } = await connectToDatabase();
+    console.log("all voters");
 
-		const data = await Voters.findAll();
-		return res.status(200).json({ message: data });
-	} catch (e) {
-		return res.status(500).json({ error: e.message });
-	}
+    const data = await Voters.findAll();
+    return res.status(200).json({ message: data });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
 }
 
 //get a single voters
 async function getById(req, res) {
-	try {
-		// Retrieve the voters using the Sequelize model and the ID from req.params.id
-		const { Voters } = await connectToDatabase();
+  try {
+    // Retrieve the voters using the Sequelize model and the ID from req.params.id
+    const { Voters } = await connectToDatabase();
 
-		const data = await Voters.findByPk(req.params.id);
-		if (!data) return res.status(404).json({ error: `id: ${req.params.id} was not found` });
-		return res.status(200).json({ message: data });
-	} catch (e) {
-		return res.status(500).json({ error: e.message });
-	}
+    const data = await Voters.findByPk(req.params.id);
+    if (!data)
+      return res
+        .status(404)
+        .json({ error: `id: ${req.params.id} was not found` });
+    return res.status(200).json({ message: data });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
 }
 
 // Update a voters
 async function updateById(req, res) {
-	try {
-		const { Voters } = await connectToDatabase();
-		// Update the voters using the Sequelize model
-		const data = await Voters.findByPk(req.params.id);
-		if (!data) return res.status(404).json({ error: `id: ${req.params.id} was not found` });
-		// Update voters properties
-		if (req.body.title) data.title = req.body.title;
-		if (req.body.description) data.description = req.body.description;
-		await data.save();
-		return res.status(200).json({ message: data });
-	} catch (e) {
-		return res.status(500).json({ error: e.message });
-	}
+  try {
+    const { Voters } = await connectToDatabase();
+    // Update the voters using the Sequelize model
+    const data = await Voters.findByPk(req.params.id);
+    if (!data)
+      return res
+        .status(404)
+        .json({ error: `id: ${req.params.id} was not found` });
+    // Update voters properties
+    if (req.body.title) data.title = req.body.title;
+    if (req.body.description) data.description = req.body.description;
+    await data.save();
+    return res.status(200).json({ message: data });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
 }
 
 // Update a address
 async function updateVoterAddress(req, res) {
-	try {
-		const { voter_pk, permenent_address, current_address, is_resident } = req.body;
-		const { Voters } = await connectToDatabase();
-		// Update the  using the Sequelize model
-		const data = await Voters.findByPk(voter_pk);
-		if (!data) return res.status(404).json({ error: `id: ${voter_pk} was not found` });
-		// Update  properties
-		if (permenent_address) data.permenent_address = permenent_address;
-		if (current_address) data.current_address = current_address;
-		if (is_resident) data.is_resident = is_resident;
-		await data.save();
-		return res.status(200).json({ message: data });
-	} catch (e) {
-		return res.status(500).json({ error: e.message });
-	}
+  try {
+    const { voter_pk, permenent_address, current_address, is_resident } =
+      req.body;
+    const { Voters } = await connectToDatabase();
+    // Update the  using the Sequelize model
+    const data = await Voters.findByPk(voter_pk);
+    if (!data)
+      return res.status(404).json({ error: `id: ${voter_pk} was not found` });
+    // Update  properties
+    if (permenent_address) data.permenent_address = permenent_address;
+    if (current_address) data.current_address = current_address;
+    if (is_resident) data.is_resident = is_resident;
+    await data.save();
+    return res.status(200).json({ message: data });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
 }
 
 // Update a phone
 async function updateVoterPhone(req, res) {
-	try {
-		const { voter_pk, phone_no } = req.body;
-		const { Voters } = await connectToDatabase();
-		// Update the  using the Sequelize model
-		const data = await Voters.findByPk(voter_pk);
-		if (!data) return res.status(404).json({ error: `id: ${voter_pk} was not found` });
-		// Update  properties
-		if (phone_no) data.phone_no = phone_no;
-		await data.save();
-		return res.status(200).json({ message: data });
-	} catch (e) {
-		return res.status(500).json({ error: e.message });
-	}
+  try {
+    const { voter_pk, phone_no } = req.body;
+    const { Voters } = await connectToDatabase();
+    // Update the  using the Sequelize model
+    const data = await Voters.findByPk(voter_pk);
+    if (!data)
+      return res.status(404).json({ error: `id: ${voter_pk} was not found` });
+    // Update  properties
+    if (phone_no) data.phone_no = phone_no;
+    await data.save();
+    return res.status(200).json({ message: data });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
 }
 
 //delete a voters
 async function deletedById(req, res) {
-	try {
-		const { Voters } = await connectToDatabase();
-		const data = await Voters.findByPk(req.params.id);
-		if (!data) return res.status(404).json({ error: `id: ${req.params.id} was not found` });
-		await data.destroy();
-		return res.status(200).json({ message: data });
-	} catch (err) {
-		return res.status(500).json({ error: err.message });
-	}
+  try {
+    const { Voters } = await connectToDatabase();
+    const data = await Voters.findByPk(req.params.id);
+    if (!data)
+      return res
+        .status(404)
+        .json({ error: `id: ${req.params.id} was not found` });
+    await data.destroy();
+    return res.status(200).json({ message: data });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
 }
 
 //joins
@@ -163,33 +175,48 @@ async function deletedById(req, res) {
 // }
 
 async function getAllWithJoinAndWhere(req, res) {
-	const page = parseInt(req.query.page || 1);
-	const limit = parseInt(req.query.limit || 50);
-	//const offset = (page - 1) * limit;
-	try {
-		const { sequelize } = await connectToDatabase();
+  const page = parseInt(req.query.page || 1);
+  const limit = parseInt(req.query.limit || 50);
+  //const offset = (page - 1) * limit;
+  try {
+    const { sequelize } = await connectToDatabase();
 
-		//dropdownFilters
-		const { state_id, district_id, consistency_id, mandal_id, division_id, sachivalayam_id, part_no, village_id } =
-			req.body;
+    //dropdownFilters
+    const {
+      state_id,
+      district_id,
+      consistency_id,
+      mandal_id,
+      division_id,
+      sachivalayam_id,
+      part_no,
+      village_id,
+    } = req.body;
 
-		const result = await sequelize.query(
-			`CALL GetVotersList(${mandal_id}, ${division_id},${sachivalayam_id},${part_no},${village_id}, ${limit}, ${page}, NULL, NULL)
+    const result = await sequelize.query(
+      `CALL GetVotersList(${mandal_id}, ${division_id},${sachivalayam_id},${part_no},${village_id}, ${limit}, ${page}, NULL, NULL)
 			`
-		);
+    );
 
-		var count = 0;
-		var completed = 0;
-		var pending = 0;
-		if (result.length != 0) {
-			count = result[0].count;
-			completed = result[0].completed;
-			pending = count - completed;
-		}
+    var count = 0;
+    var completed = 0;
+    var pending = 0;
+    if (result.length != 0) {
+      count = result[0].count;
+      completed = result[0].completed;
+      pending = count - completed;
+    }
 
-		return res.status(200).json({ count: count, completed: completed, pending: pending, data: result });
+    return res
+      .status(200)
+      .json({
+        count: count,
+        completed: completed,
+        pending: pending,
+        data: result,
+      });
 
-		/*
+    /*
 			var query = `
 		WITH FilteredData AS (
 			SELECT  
@@ -284,48 +311,49 @@ ORDER BY surveydatetime DESC
 
 		return res.status(200).json({ message: { count: count, completed: completed, pending: pending, data: data } });
 	    */
-	} catch (e) {
-		return res.status(500).json({ error: e.message });
-	}
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
 }
 
 async function votersMappingtogruhasaradhi(req, res) {
-	try {
-		const { user_pk, voterspkList } = req.body;
+  try {
+    const { user_pk, voterspkList } = req.body;
 
-		const { VoterMapping } = await connectToDatabase();
+    const { VoterMapping } = await connectToDatabase();
 
-		for (const voter_pk of voterspkList) {
-			const existingEntry = await VoterMapping.findOne({
-				where: {
-					voter_id: voter_pk,
-				},
-			});
+    for (const voter_pk of voterspkList) {
+      const existingEntry = await VoterMapping.findOne({
+        where: {
+          voter_id: voter_pk,
+        },
+      });
 
-			if (existingEntry) {
-				await existingEntry.update({ user_id: user_pk });
-			} else {
-				const newEntry = await VoterMapping.create({
-					voter_id: voter_pk,
-					user_id: user_pk,
-				});
-			}
-		}
+      if (existingEntry) {
+        await existingEntry.update({ user_id: user_pk });
+      } else {
+        const newEntry = await VoterMapping.create({
+          voter_id: voter_pk,
+          user_id: user_pk,
+        });
+      }
+    }
 
-		res.status(200).json({ message: 'done' });
-	} catch (e) {
-		return res.status(500).json({ error: e.message });
-	}
+    res.status(200).json({ message: "done" });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
 }
 
 module.exports = {
-	getById,
-	create,
-	updateById,
-	deletedById,
-	//getAllWithJoin,
-	getAllWithJoinAndWhere,
-	updateVoterAddress,
-	updateVoterPhone,
-	votersMappingtogruhasaradhi,
+  getById,
+  create,
+  updateById,
+  deletedById,
+  //getAllWithJoin,
+  getAllWithJoinAndWhere,
+  updateVoterAddress,
+  updateVoterPhone,
+  votersMappingtogruhasaradhi,
+  getAll,
 };
