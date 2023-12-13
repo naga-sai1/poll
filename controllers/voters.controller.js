@@ -177,7 +177,7 @@ async function deletedById(req, res) {
 async function getAllWithJoinAndWhere(req, res) {
   const page = parseInt(req.query.page || 1);
   const limit = parseInt(req.query.limit || 50);
-  //const offset = (page - 1) * limit;
+  const offset = (page - 1) * limit;
   try {
     const { sequelize } = await connectToDatabase();
 
@@ -191,33 +191,42 @@ async function getAllWithJoinAndWhere(req, res) {
       sachivalayam_id,
       part_no,
       village_id,
+      gender,
+      religion_id,
+      caste_id,
+      disability,
+      govt_employee,
+      age,
     } = req.body;
 
-    const result = await sequelize.query(
-      `CALL GetVotersList(${mandal_id}, ${division_id},${sachivalayam_id},${part_no},${village_id}, ${limit}, ${page}, NULL, NULL)
-			`
-    );
+    const [age1,age2] = age.split("-");
+    const pasedAge1 = parseInt(age1);
+    const pasedAge2 = parseInt(age2);
+
+    // const result = await sequelize.query(
+    //   `CALL GetVotersList(${mandal_id}, ${division_id},${sachivalayam_id},${part_no},${village_id}, ${limit}, ${page}, NULL, NULL)
+    // 	`
+    // );
 
     var count = 0;
     var completed = 0;
     var pending = 0;
-    if (result.length != 0) {
-      count = result[0].count;
-      completed = result[0].completed;
-      pending = count - completed;
-    }
+    // if (result.length != 0) {
+    //   count = result[0].count;
+    //   completed = result[0].completed;
+    //   pending = count - completed;
+    // }
 
-    return res
-      .status(200)
-      .json({
-        count: count,
-        completed: completed,
-        pending: pending,
-        data: result,
-      });
+    // return res
+    //   .status(200)
+    //   .json({
+    //     count: count,
+    //     completed: completed,
+    //     pending: pending,
+    //     data: result,
+    //   });
 
-    /*
-			var query = `
+    var query = `
 		WITH FilteredData AS (
 			SELECT  
 				v.*,
@@ -226,7 +235,9 @@ async function getAllWithJoinAndWhere(req, res) {
 				ps.voted_party,
 				ps.createdon as surveydatetime,
 				v.phone_no as voter_phone_no,
-				v.age as voter_age, 
+				v.age as voter_age,
+        l.lookup_valuename as gender_catageri,
+        ll.lookup_valuename as religion_catageri, 
 				v.voter_pk as voter_pkk,
 				(SELECT lookup_valuename FROM lookup WHERE lookup_pk = v.caste_id) AS caste_name,
 				(SELECT lookup_valuename FROM lookup WHERE lookup_pk = v.religion_id) AS religion_name,
@@ -244,6 +255,8 @@ async function getAllWithJoinAndWhere(req, res) {
 				LEFT JOIN parts p ON v.part_no = p.part_no
 				LEFT JOIN villages vl ON v.village_id = vl.village_pk
 				LEFT JOIN users u ON v.volunteer_id = u.user_pk  
+        LEFT JOIN lookup l ON v.gender = l.lookup_pk
+        LEFT JOIN lookup ll ON v.religion_id = ll.lookup_pk
 			WHERE
 				v.is_newregistration = false
 	AND 
@@ -273,44 +286,88 @@ async function getAllWithJoinAndWhere(req, res) {
                 query += `AND
               v.part_no = (:part_no)`;
 
-								if (village_id != null && village_id != '') {
-									query += `AND
+                if (village_id != null && village_id != "") {
+                  query += `AND
                 v.village_id = (:village_id) `;
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    if (gender != null && gender != "") {
+      query += `AND
+      v.gender = (:gender)`;
+    }
+    if (religion_id != null && religion_id != "") {
+      query += `AND
+      v.religion_id = (:religion_id)`;
+    }
+    if (caste_id != null && caste_id != "") {
+      query += `AND
+      v.caste_id = (:caste_id)`;
+    }
 
-		query += `)
+    if (disability != null && disability != "") {
+      query += `AND
+      v.disability = (:disability)`;
+    }
+    if (govt_employee != null && govt_employee != "") {
+      if (govt_employee == "true") {
+        query += `AND
+        v.govt_employee = 1 AND v.govt_employee IS NOT null`;
+      } else if (govt_employee == "false"){
+        query += `AND
+        v.govt_employee = 0 AND v.govt_employee IS NOT `;
+      }
+    }
+    if (age != null && age != "") {
+      query += `AND
+      v.age BETWEEN (${pasedAge1}) AND (${pasedAge2})`;
+    }
+
+    query += `)
 		SELECT *,
     (SELECT COUNT(*) FROM FilteredData) AS count,
     (SELECT COUNT(*) FROM FilteredData WHERE opinionparty IS NOT NULL) AS completed
 FROM FilteredData
 ORDER BY surveydatetime DESC
-		LIMIT 10 OFFSET 0
+		LIMIT 50 OFFSET 0
 		`;
 
-		const data = await sequelize.query(query, {
-			type: sequelize.QueryTypes.SELECT,
-			replacements: {
-				state_id: state_id,
-				district_id: district_id,
-				consistency_id: consistency_id,
-				mandal_id: mandal_id,
-				division_id: division_id,
-				sachivalayam_id: sachivalayam_id,
-				part_no: part_no,
-				village_id: village_id,
-				limit: limit,
-				offset: offset,
-			},
-		});
+    const data = await sequelize.query(query, {
+      type: sequelize.QueryTypes.SELECT,
+      replacements: {
+        state_id: state_id,
+        district_id: district_id,
+        consistency_id: consistency_id,
+        mandal_id: mandal_id,
+        division_id: division_id,
+        sachivalayam_id: sachivalayam_id,
+        part_no: part_no,
+        village_id: village_id,
+        gender: gender,
+        religion_id: religion_id,
+        caste_id: caste_id,
+        disability: disability,
+        age: age,
+        govt_employee: govt_employee,
+        limit: limit,
+        offset: offset,
+      },
+    });
 
-		return res.status(200).json({ message: { count: count, completed: completed, pending: pending, data: data } });
-	    */
+    return res
+      .status(200)
+      .json({
+        message: {
+          count: count,
+          completed: completed,
+          pending: pending,
+          data: data,
+        },
+      });
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }

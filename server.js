@@ -25,6 +25,7 @@ const userRouter = require('./routes/users.route.js');
 const villageRouter = require('./routes/villages.route.js');
 const votersRouter = require('./routes/voters.route.js');
 const twilioRouter = require('./routes/twilio.route.js');
+const ticket_historyRouter = require('./routes/ticket_history.route.js');
 
 const { join } = require('path');
 const { sendSMS } = require('./services/sms');
@@ -84,6 +85,7 @@ app.use(ticket_masterRouter);
 app.use(userRouter);
 app.use(villageRouter);
 app.use(votersRouter);
+app.use(ticket_historyRouter);
 
 app.get('/', async (req, res) => {
 	try {
