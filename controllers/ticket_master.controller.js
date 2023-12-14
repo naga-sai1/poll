@@ -282,6 +282,52 @@ ORDER BY surveydatetime DESC
   }
 }
 
+async function createTicketInTicketMasterAndTicketHistory(req, res) {
+  const {
+    voter_pk,
+    volunteer_id,
+    navaratnalu_id,
+    reason,
+    status_id,
+    createdby,
+  } = req.body;
+  try {
+    const { Ticket_master, Ticket_history } = await connectToDatabase();
+
+    const existingEntry = await Ticket_master.findOne({
+      where: {
+        voter_pk: voter_pk,
+        navaratnalu_id: navaratnalu_id,
+      },
+    });
+
+    if (existingEntry) {
+      return res.status(200).json({ message: "Ticket already exists" });
+    } else {
+      const newEntry = await Ticket_master.create({
+        voter_pk: voter_pk,
+        volunteer_id: volunteer_id,
+        navaratnalu_id: navaratnalu_id,
+        reason: reason,
+        status_id: status_id,
+        createdby: createdby,
+      });
+
+      const newEntry1 = await Ticket_history.create({
+        ticket_master_pk: newEntry.ticket_master_pk,
+        reason: reason,
+        status_id: status_id,
+        createdby: createdby,
+      });
+
+      return res.status(200).json({ message: "Ticket created successfully" });
+    }
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+}  
+
+
 module.exports = {
   getById,
   getAll,
@@ -291,4 +337,5 @@ module.exports = {
   getAllWithJoin,
   updateTicketStatus,
   getAllWithJoinAndWhere,
+  createTicketInTicketMasterAndTicketHistory,
 };

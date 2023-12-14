@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
           autoIncrement: true,
         },
         ticket_attachment_id: DataTypes.INTEGER,
-        ticket_master_id: DataTypes.INTEGER,
+        ticket_master_pk: DataTypes.INTEGER,
         reason: DataTypes.STRING,
         status_id: DataTypes.INTEGER,
         createdby: DataTypes.INTEGER,

@@ -108,62 +108,57 @@ async function getAllWithJoin(req, res) {
 }
 
 async function save_or_updated_ticket(req, res) {
-	try {
-		const { Ticket_history, ticket_master } = await connectToDatabase();
+  try {
+    const { Ticket_history, Ticket_master } = await connectToDatabase();
 
-		const {
-			ticket_master_id,
-			reason,
-            status_id,
-            createdby,
-		} = req.body;
+    const { ticket_master_pk, reason, status_id, createdby } = req.body;
 
-		console.log(req.body);
-		//update user
-		const data = await ticket_master.findByPk(ticket_master_pk);
-		if (reason) data.reason = reason;
+    console.log(req.body);
+    //update user
+    const data = await Ticket_master.findByPk(ticket_master_pk);
+    if (reason) data.reason = reason;
 
-		if (status_id) data.status_id = status_id;
-		if (createdby) data.createdby = createdby;
-		await data.save();
-		//////////////////////////////////////////////////
+    if (status_id) data.status_id = status_id;
+    if (createdby) data.createdby = createdby;
+    await data.save();
+    //////////////////////////////////////////////////
 
-		const existingEntry1 = await ticket_history.findOne({
-			where: {
-				ticket_master_pk: ticket_master_pk,
-			},
-		});
+    const existingEntry1 = await Ticket_history.findOne({
+      where: {
+        ticket_master_pk: ticket_master_pk,
+      },
+    });
 
-		if (existingEntry1) {
-			await existingEntry1.update({
-				reason: reason,
+    if (existingEntry1) {
+      await existingEntry1.update({
+        reason: reason,
         status_id: status_id,
-        createdby: createdby,
-			});
+        //createdby: createdby,
+      });
 
-			return res.status(200).json({ message: 'Entry updated successfully' });
-		} else {
-			const newEntry1 = await ticket_history.create({
-				reason: reason,
-                status_id: status_id,
-                createdby: createdby,
-				ticket_master_pk: ticket_master_pk,
-			});
+      return res.status(200).json({ message: data });
+    } else {
+      const newEntry1 = await ticket_history.create({
+        reason: reason,
+        status_id: status_id,
+        //createdby: createdby,
+        //ticket_master_pk: ticket_master_pk,
+      });
 
-			return res.status(200).json({ message: 'Entry created successfully' });
-		}
-	} catch (e) {
-		console.log(e);
-		return res.status(500).json({ error: e.message });
-	}
+      return res.status(200).json({ message: data });
+    }
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: e.message });
+  }
 }
 
 module.exports = {
   //getById,
   getAll,
   create,
-//updateById,
-//deletedById,
+  //updateById,
+  //deletedById,
   getAllWithJoin,
   save_or_updated_ticket,
 };

@@ -12,5 +12,6 @@ router.get('/getallticketmasterwithjoin', controller.getAllWithJoin);
 router.put('/updateticketstatus/', controller.updateTicketStatus);
 
 router.post('/getallticketswithjoinandwhere', controller.getAllWithJoinAndWhere);
+router.post('/createticketinticketmasterandtickethistory', controller.createTicketInTicketMasterAndTicketHistory);
 
 module.exports = router;

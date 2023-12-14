@@ -203,30 +203,30 @@ async function getAllWithJoinAndWhere(req, res) {
     const pasedAge1 = parseInt(age1);
     const pasedAge2 = parseInt(age2);
 
-    // const result = await sequelize.query(
-    //   `CALL GetVotersList(${mandal_id}, ${division_id},${sachivalayam_id},${part_no},${village_id}, ${limit}, ${page}, NULL, NULL)
-    // 	`
-    // );
+    const result = await sequelize.query(
+      `CALL GetVotersList(${mandal_id}, ${division_id},${sachivalayam_id},${part_no},${village_id}, ${limit}, ${page}, NULL, NULL)
+    	`
+    );
 
     var count = 0;
     var completed = 0;
     var pending = 0;
-    // if (result.length != 0) {
-    //   count = result[0].count;
-    //   completed = result[0].completed;
-    //   pending = count - completed;
-    // }
+    if (result.length != 0) {
+      count = result[0].count;
+      completed = result[0].completed;
+      pending = count - completed;
+    }
 
-    // return res
-    //   .status(200)
-    //   .json({
-    //     count: count,
-    //     completed: completed,
-    //     pending: pending,
-    //     data: result,
-    //   });
+    return res
+      .status(200)
+      .json({
+        count: count,
+        completed: completed,
+        pending: pending,
+        data: result,
+      });
 
-    var query = `
+   /* var query = `
 		WITH FilteredData AS (
 			SELECT  
 				v.*,
@@ -314,13 +314,8 @@ async function getAllWithJoinAndWhere(req, res) {
       v.disability = (:disability)`;
     }
     if (govt_employee != null && govt_employee != "") {
-      if (govt_employee == "true") {
-        query += `AND
-        v.govt_employee = 1 AND v.govt_employee IS NOT null`;
-      } else if (govt_employee == "false"){
-        query += `AND
-        v.govt_employee = 0 AND v.govt_employee IS NOT `;
-      }
+      query += `AND
+      v.govt_employee = (:govt_employee)`;
     }
     if (age != null && age != "") {
       query += `AND
@@ -367,7 +362,7 @@ ORDER BY surveydatetime DESC
           pending: pending,
           data: data,
         },
-      });
+      });*/
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }

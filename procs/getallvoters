@@ -5,7 +5,6 @@ IN p_SachiId int,
 IN p_PartNo int,
 IN P_VillNo int,
 IN p_gender int,
-IN P_
 IN p_results_per_page int, 
 IN p_pagenumber int, 
 IN p_sort_column varchar(100), 
