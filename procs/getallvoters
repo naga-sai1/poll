@@ -53,8 +53,8 @@ BEGIN
         IF(p_DivId IS NOT NULL, CONCAT(" AND v.division_id = ", p_DivId), ""),
         IF(p_SachiId IS NOT NULL, CONCAT(" AND v.sachivalayam_id = ", p_SachiId), ""),
         IF(p_PartNo IS NOT NULL, CONCAT(" AND v.part_no = ", p_PartNo), ""),
-        IF(P_VillNo IS NOT NULL, CONCAT(" AND v.village_id = ", P_VillNo), ""),
-        IF(p_gender IS NOT NULL, CONCAT(" AND v.gender = ", gender), ""),
+        IF(P_VillNo IS NOT NULL, CONCAT(" AND v.village_id = ", p_VillNo), ""),
+        IF(p_gender IS NOT NULL, CONCAT(" AND v.gender = ", p_gender), ""),
         CONCAT(") 
         SELECT *,
         (SELECT COUNT(*) FROM FilteredData) AS count,
