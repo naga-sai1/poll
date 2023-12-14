@@ -7,5 +7,6 @@ router.post('/save_or_updated_ticket_history', controller.save_or_updated_ticket
 
 //join queries
 router.get('/getalltickethistorywithjoin', controller.getAllWithJoin);
+router.post('/getonetickethistory', controller.getOneTicket);
 
 module.exports = router;

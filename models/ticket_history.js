@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         reason: DataTypes.STRING,
         status_id: DataTypes.INTEGER,
         createdby: DataTypes.INTEGER,
+        createdon: DataTypes.DATE,
       },
   
       {

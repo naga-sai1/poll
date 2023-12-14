@@ -203,30 +203,32 @@ async function getAllWithJoinAndWhere(req, res) {
     const pasedAge1 = parseInt(age1);
     const pasedAge2 = parseInt(age2);
 
-    const result = await sequelize.query(
-      `CALL GetVotersList(${mandal_id}, ${division_id},${sachivalayam_id},${part_no},${village_id}, ${limit}, ${page}, NULL, NULL)
-    	`
-    );
+    // const result = await sequelize.query(
+    //   `CALL GetVotersList2(${mandal_id}, ${division_id},${sachivalayam_id},${part_no},${village_id}, ${limit}, ${page}, NULL, NULL)
+    // 	`
+    // );
 
     var count = 0;
     var completed = 0;
     var pending = 0;
-    if (result.length != 0) {
-      count = result[0].count;
-      completed = result[0].completed;
-      pending = count - completed;
-    }
+    // if (result.length != 0) {
+    //   count = result[0].count;
+    //   completed = result[0].completed;
+    //   pending = count - completed;
+    // }
 
-    return res
-      .status(200)
-      .json({
-        count: count,
-        completed: completed,
-        pending: pending,
-        data: result,
-      });
+    // return res
+    //   .status(200)
+    //   .json({
+    //     message: {
+    //     count: count,
+    //     completed: completed,
+    //     pending: pending,
+    //     data: result,
+    //   },
+    //   });
 
-   /* var query = `
+    var query = `
 		WITH FilteredData AS (
 			SELECT  
 				v.*,
@@ -362,7 +364,7 @@ ORDER BY surveydatetime DESC
           pending: pending,
           data: data,
         },
-      });*/
+      });
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }

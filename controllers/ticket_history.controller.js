@@ -153,6 +153,27 @@ async function save_or_updated_ticket(req, res) {
   }
 }
 
+async function getOneTicket(req, res){
+  const { ticket_master_pk } = req.body;
+  try {
+    const {sequelize} = await connectToDatabase();
+    
+    var query = `
+    SELECT *
+    FROM ticket_history th
+    where th.ticket_master_pk = ${ticket_master_pk}`;
+
+    const data = await sequelize.query(query, {
+      type: sequelize.QueryTypes.SELECT,
+    });
+
+    return res.status(200).json({ message: data });
+  }catch (e) {
+    console.log(e);
+    return res.status(500).json({ error: e.message });
+  }
+}
+
 module.exports = {
   //getById,
   getAll,
@@ -161,4 +182,5 @@ module.exports = {
   //deletedById,
   getAllWithJoin,
   save_or_updated_ticket,
+  getOneTicket,
 };
