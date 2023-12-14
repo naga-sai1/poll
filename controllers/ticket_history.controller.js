@@ -120,7 +120,7 @@ async function save_or_updated_ticket(req, res) {
 
 		console.log(req.body);
 		//update user
-		const data = await ticket_master.findByPk(ticket_master_id);
+		const data = await ticket_master.findByPk(ticket_master_pk);
 		if (reason) data.reason = reason;
 
 		if (status_id) data.status_id = status_id;
@@ -130,15 +130,15 @@ async function save_or_updated_ticket(req, res) {
 
 		const existingEntry1 = await ticket_history.findOne({
 			where: {
-				ticket_master_id: ticket_master_id,
+				ticket_master_pk: ticket_master_pk,
 			},
 		});
 
 		if (existingEntry1) {
 			await existingEntry1.update({
 				reason: reason,
-                status_id: status_id,
-                createdby: createdby,
+        status_id: status_id,
+        createdby: createdby,
 			});
 
 			return res.status(200).json({ message: 'Entry updated successfully' });
@@ -147,7 +147,7 @@ async function save_or_updated_ticket(req, res) {
 				reason: reason,
                 status_id: status_id,
                 createdby: createdby,
-				ticket_master_id: ticket_master_id,
+				ticket_master_pk: ticket_master_pk,
 			});
 
 			return res.status(200).json({ message: 'Entry created successfully' });

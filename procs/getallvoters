@@ -4,6 +4,8 @@ IN p_DivId int,
 IN p_SachiId int,
 IN p_PartNo int,
 IN P_VillNo int,
+IN p_gender int,
+IN P_
 IN p_results_per_page int, 
 IN p_pagenumber int, 
 IN p_sort_column varchar(100), 
@@ -53,6 +55,7 @@ BEGIN
         IF(p_SachiId IS NOT NULL, CONCAT(" AND v.sachivalayam_id = ", p_SachiId), ""),
         IF(p_PartNo IS NOT NULL, CONCAT(" AND v.part_no = ", p_PartNo), ""),
         IF(P_VillNo IS NOT NULL, CONCAT(" AND v.village_id = ", P_VillNo), ""),
+        IF(p_gender IS NOT NULL, CONCAT(" AND v.gender = ", gender), ""),
         CONCAT(") 
         SELECT *,
         (SELECT COUNT(*) FROM FilteredData) AS count,
