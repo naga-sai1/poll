@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const connectToDatabase = require("../misc/db");
 
 //create a ticket_master
@@ -325,7 +326,33 @@ async function createTicketInTicketMasterAndTicketHistory(req, res) {
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
-}  
+}
+
+async function ticketResolved (req, res){
+  try {
+    const { Ticket_master, sequelize } = await connectToDatabase(); 
+    const { ticket_master_pk } = req.body; 
+    const data = await Ticket_master.findByPk(ticket_master_pk);
+    if (!data)
+      return res
+        .status(404)
+        .json({ error: `id: ${req.params.id} was not found` });
+    var query = `
+    update ticket_master
+    set is_open = 0
+    where ticket_master_pk = (:ticket_master_pk)`;
+    const data1 = await sequelize.query(query, {
+      type: sequelize.QueryTypes.UPDATE,
+      replacements: {
+        ticket_master_pk: ticket_master_pk,
+      },
+    });
+    return res.status(200).json({ message: data });
+  }
+  catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+}
 
 
 module.exports = {
@@ -338,4 +365,5 @@ module.exports = {
   updateTicketStatus,
   getAllWithJoinAndWhere,
   createTicketInTicketMasterAndTicketHistory,
+  ticketResolved,
 };
