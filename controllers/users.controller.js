@@ -440,13 +440,13 @@ async function designationMappingtoUsers(req, res) {
     const { sequelize } = await connectToDatabase();
 
     for (const user_pk of usersPkList) {
-      // var _query = `update
-			//  users
-			//  set 
-			//  designation_id = (:designation_id),
-			//  part_no = (:part_no)
-			//  where user_pk = (:user_pk)
-			// `;
+      var _query = `update
+			 users
+			 set 
+			 designation_id = (:designation_id),
+			 part_no = (:part_no)
+			 where user_pk = (:user_pk)
+			`;
       await sequelize.query(_query, {
         type: sequelize.QueryTypes.UPDATE,
         replacements: {
