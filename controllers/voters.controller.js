@@ -199,12 +199,12 @@ async function getAllWithJoinAndWhere(req, res) {
       age,
     } = req.body;
 
-    const [age1,age2] = age.split("-");
-    const pasedAge1 = parseInt(age1);
-    const pasedAge2 = parseInt(age2);
+    // const [age1, age2] = age.split("-");
+    // const pasedAge1 = parseInt(age1);
+    // const pasedAge2 = parseInt(age2);
 
     const result = await sequelize.query(
-      `CALL GetVotersList4(${mandal_id}, ${division_id},${sachivalayam_id},${part_no},${village_id}, ${limit}, ${page}, NULL, NULL)
+      `CALL GetVotersList5(${mandal_id}, ${division_id},${sachivalayam_id},${part_no},${village_id}, ${gender}, ${religion_id}, ${caste_id}, ${disability}, ${govt_employee}, ${limit}, ${page}, NULL, NULL)
     	`
     );
 
@@ -217,18 +217,16 @@ async function getAllWithJoinAndWhere(req, res) {
       pending = count - completed;
     }
 
-    return res
-      .status(200)
-      .json({
-        message: {
+    return res.status(200).json({
+      message: {
         count: count,
         completed: completed,
         pending: pending,
         data: result,
       },
-      });
+    });
 
-   /* var query = `
+    /* var query = `
 		WITH FilteredData AS (
 			SELECT  
 				v.*,

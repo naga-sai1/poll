@@ -278,7 +278,7 @@ async function getAllWithJoinAndWhere(req, res) {
 		*,
 		GROUP_CONCAT(um.part_no) AS parts,
 		u.part_no as part_no,
-		l.lookup_pk designation_id,
+		l.lookup_pk as designation_id,
 		l.lookup_valuename as designation_name,
 		u.division_id as division_pkk
 		FROM users u
