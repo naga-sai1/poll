@@ -11,8 +11,9 @@ router.delete('/ticket_master/:id', controller.deletedById);
 router.get('/getallticketmasterwithjoin', controller.getAllWithJoin);
 router.put('/updateticketstatus/', controller.updateTicketStatus);
 
-router.post('/getallticketswithjoinandwhere', controller.getAllWithJoinAndWhere);
+router.post('/getallticketswithjoinandwhere', controller.getAllTicketsWithJoinAndWhere);
 router.post('/createticketinticketmasterandtickethistory', controller.createTicketInTicketMasterAndTicketHistory);
 router.post('/getresolvedtickets', controller.ticketResolved);
+router.post('/getallticketsbyvoterid', controller.getAllTicketsByVoterId);
 
 module.exports = router;

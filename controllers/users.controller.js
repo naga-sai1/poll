@@ -129,7 +129,7 @@ async function login2(req, res) {
 
 async function login(req, res) {
   try {
-    const { phone_no, password } = req.body;
+    const { username, password } = req.body;
     const { sequelize } = await connectToDatabase();
     const _query = `
 		select 
@@ -175,7 +175,7 @@ async function login(req, res) {
 		left join villages v
 		on u.village_id = v.village_pk
 		where 
-		u.phone_no = (:phone_no)
+		u.username = (:username)
 		and
 		u.password = (:password)
 		GROUP BY u.user_pk
@@ -183,7 +183,7 @@ async function login(req, res) {
     const data = await sequelize.query(_query, {
       type: sequelize.QueryTypes.SELECT,
       replacements: {
-        phone_no: phone_no,
+        username: username,
         password: password,
       },
     });
@@ -433,35 +433,35 @@ async function volunteerMappingtoVoters(req, res) {
   }
 }
 
-async function designationMappingtoUsers(req, res) {
-  try {
-    const { designation_id, usersPkList, part_no } = req.body;
+// async function designationMappingtoUsers(req, res) {
+//   try {
+//     const { designation_id, usersPkList, part_no } = req.body;
 
-    const { sequelize } = await connectToDatabase();
+//     const { sequelize } = await connectToDatabase();
 
-    for (const user_pk of usersPkList) {
-      var _query = `update
-			 users
-			 set 
-			 designation_id = (:designation_id),
-			 part_no = (:part_no)
-			 where user_pk = (:user_pk)
-			`;
-      await sequelize.query(_query, {
-        type: sequelize.QueryTypes.UPDATE,
-        replacements: {
-          // designation_id: designation_id,
-          user_pk: user_pk,
-          part_no: part_no,
-        },
-      });
-    }
+//     for (const user_pk of usersPkList) {
+//       var _query = `update
+// 			 users
+// 			 set 
+// 			 designation_id = (:designation_id),
+// 			 part_no = (:part_no)
+// 			 where user_pk = (:user_pk)
+// 			`;
+//       await sequelize.query(_query, {
+//         type: sequelize.QueryTypes.UPDATE,
+//         replacements: {
+//           // designation_id: designation_id,
+//           user_pk: user_pk,
+//           part_no: part_no,
+//         },
+//       });
+//     }
 
-    res.status(200).json({ message: "done" });
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
-}
+//     res.status(200).json({ message: "done" });
+//   } catch (e) {
+//     return res.status(500).json({ error: e.message });
+//   }
+// }
 
 async function managerMappingtoUsers(req, res) {
   try {
@@ -545,7 +545,7 @@ async function updateUserPassword(req, res) {
 
 async function designationMappingtoUsers(req, res) {
   try {
-    const { designation_id, usersPkList, part_no_List } = req.body;
+    const { usersPkList, part_no_List } = req.body;
 
     const { sequelize } = await connectToDatabase();
 
@@ -555,13 +555,13 @@ async function designationMappingtoUsers(req, res) {
 			// SET designation_id = (:designation_id)
 			// WHERE user_pk = (:user_pk)`;
 
-      await sequelize.query(_query, {
-        type: sequelize.QueryTypes.UPDATE,
-        replacements: {
-          //designation_id: designation_id,
-          user_pk: user_pk,
-        },
-      });
+      // await sequelize.query(_query, {
+      //   type: sequelize.QueryTypes.UPDATE,
+      //   replacements: {
+      //     designation_id: designation_id,
+      //     user_pk: user_pk,
+      //   },
+      // });
 
       var _query = `DELETE FROM user_mapping
 			WHERE user_id = (:user_pk)`;
@@ -621,13 +621,15 @@ async function sendCredstoUsers(req, res) {
 			 update
 			 users
 			 set 
-			 password = :password
-			 where user_pk = :user_pk AND is_first_login = true
+			//  password = :password
+       password_encrypted = md5(:password)
+			 where user_pk = :user_pk AND is_first_login = false;
 			`;
       const data = await sequelize.query(_query, {
         type: sequelize.QueryTypes.UPDATE,
         replacements: {
-          password: password,
+          // password: password,
+          password_encrypted : md5(password),
           //password: '87654321',
           user_pk: user.user_pk,
         },
@@ -750,6 +752,68 @@ async function getNextLevelUserByDesignation(req, res) {
   }
 }
 
+async function uservalidationwithphoneno(req, res) {
+  try {
+    const { Users ,sequelize } = await connectToDatabase();
+    const { username } = req.body;
+    const data = await Users.findOne({
+      where: { username: username },
+    });
+    if (!data) {
+      return res.status(401).json({ message: `user not found in this phone no` });
+    }
+    const otp = 123456;
+    var query = `
+    update users
+    set
+    otp = (:otp)
+    where username = (:username)
+    `;
+    const data1 = await sequelize.query(query, {
+      type: sequelize.QueryTypes.UPDATE,
+      replacements: {
+        otp: otp,
+        username: username,
+      },
+    });
+    return res.status(200).json({ message: `OTP sent successfully` });
+  }
+  catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+}
+
+async function saveNewPassword(req, res) {
+  console.log("hi");
+  try {
+    const { username, otp, password } = req.body;
+    const { Users } = await connectToDatabase();
+    //Update the  using the Sequelize model
+    const data = await Users.findOne({
+      where: { username: username },
+    });
+    if (!data)
+      return res.status(404).json({ error: `phone no: ${username} was not found` });
+    const generatedOtp = data.otp;
+
+    if (otp != generatedOtp) {
+      console.log("here")
+      return res.status(401).json({ message: `OTP is not valid` });
+    }
+    else{
+      // data.password_encrypted = MD5(password);
+      data.password = password;
+      // data.is_first_login = false;
+      await data.save();
+      return res.status(200).json({ message: `Password updated successfully` });
+    }
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+}
+
+
+
 module.exports = {
   getById,
   getAll,
@@ -765,4 +829,6 @@ module.exports = {
   designationMappingtoUsers,
   sendCredstoUsers,
   getNextLevelUserByDesignation,
+  uservalidationwithphoneno,
+  saveNewPassword
 };

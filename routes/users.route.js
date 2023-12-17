@@ -19,5 +19,7 @@ router.post('/designationmappingtousers', controller.designationMappingtoUsers);
 router.post('/sendcredstousers', controller.sendCredstoUsers);
 
 router.post('/getnextleveluser', controller.getNextLevelUserByDesignation);
+router.post('/uservalidationwithphoneno', controller.uservalidationwithphoneno);
+router.post('/savenewpassword', controller.saveNewPassword);
 
 module.exports = router;

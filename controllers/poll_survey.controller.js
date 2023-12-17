@@ -310,8 +310,36 @@ async function getOpininoPollDashboardByJoinWhere(req, res) {
 		const { sequelize } = await connectToDatabase();
 
 		//dropdownFilters
-		const { state_id, district_id, consistency_id, mandal_id, division_id, sachivalayam_id, part_no, village_id } =
+		const { 
+			state_id,
+			district_id,
+			consistency_id,
+			mandal_id,
+			division_id,
+			sachivalayam_id,
+			part_no,
+			village_id, 
+			gender,
+			religion_id,
+			caste_id,
+			disability,
+			govt_employee,
+			age,  
+		} =
 			req.body;
+
+		let age_min = 0;
+		let age_max = 100;
+		
+		  if (age == "80+"){
+			age_min = 80;
+			age_max = 1000;
+		  }  
+		  else if (age != ""){  
+			const [age1, age2] = age.split("-");
+			age_min = parseInt(age1);
+			age_max = parseInt(age2);
+		  }	
 
 		var query = `
 		SELECT *, 
@@ -393,6 +421,32 @@ async function getOpininoPollDashboardByJoinWhere(req, res) {
 			}
 		}
 
+		if (gender != null && gender != '') {
+			query += `AND
+			v.gender = (:gender)`;
+		}
+		if (religion_id != null && religion_id != '') {
+			query += `AND
+			v.religion_id = (:religion_id)`;
+		}
+		if (caste_id != null && caste_id != '') {
+			query += `AND
+			v.caste_id = (:caste_id)`;
+		}
+		if (disability != null && disability != '') {
+			query += `AND
+			v.disability = (:disability)`;
+		}
+		if (govt_employee != null && govt_employee != '') {
+			query += `AND
+			v.govt_employee = (:govt_employee)`;
+		}
+		if (age != null && age != '') {
+			query += `AND
+			v.age >= (:age_min) AND v.age <= (:age_max)`;
+		}
+
+
 		const data = await sequelize.query(query, {
 			type: sequelize.QueryTypes.SELECT,
 			replacements: {
@@ -404,6 +458,12 @@ async function getOpininoPollDashboardByJoinWhere(req, res) {
 				sachivalayam_id: sachivalayam_id,
 				part_no: part_no,
 				village_id: village_id,
+				gender: gender,
+				religion_id: religion_id,
+				caste_id: caste_id,
+				disability: disability,
+				govt_employee: govt_employee,
+				age: age,
 			},
 		});
 
@@ -451,13 +511,13 @@ async function getOpininoPollDashboardByJoinWhere(req, res) {
 				},
 				gender: {
 					male: data.filter(
-						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.gender == 13
+						(item) => item.is_newregistration == 0  && item.gender == 13
 					).length,
 					female: data.filter(
-						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.gender == 14
+						(item) => item.is_newregistration == 0 && item.gender == 14
 					).length,
 					tg: data.filter(
-						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.gender == 15
+						(item) => item.is_newregistration == 0 && item.gender == 15
 					).length,
 				},
 				age: {
@@ -496,8 +556,16 @@ async function getOpininoPollDashboardByJoinWhere(req, res) {
 							item.voter_age >= 56 &&
 							item.voter_age <= 65
 					).length,
-					'66-66+': data.filter(
-						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.voter_age >= 66
+					'66-80': data.filter(
+						(item) => item.is_newregistration == 0 &&
+						 item.intrested_party !== null &&
+						item.voter_age >= 66 &&
+						item.voter_age <= 80
+					).length,
+					'80+': data.filter(
+						(item) => item.is_newregistration == 0 &&
+						 item.intrested_party !== null &&
+						item.voter_age >= 80
 					).length,
 				},
 				residential: {
@@ -506,6 +574,83 @@ async function getOpininoPollDashboardByJoinWhere(req, res) {
 					).length,
 					nonresidential: data.filter(
 						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.is_resident == 0
+					).length,
+				},
+				disability: {
+					yes: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.disability == 1
+					).length,
+					no: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.disability == 0
+					).length,
+				},
+				govt_employee: {
+					yes: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.govt_employee == 1
+					).length,
+					no: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.govt_employee == 0
+					).length,
+				},
+				religion: {
+					hindu: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.religion_id == 81
+					).length,
+					muslim: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.religion_id == 82
+					).length,
+					christian: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.religion_id == 83
+					).length,
+					sikh: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.religion_id == 84
+					).length,
+					buddhist: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.religion_id == 85
+					).length,
+					jain: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.religion_id == 86
+					).length,
+					others: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.religion_id == 87
+					).length,
+				},
+				caste: {
+					brahmin: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.caste_id == 88
+					).length,
+					kshatriya: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.caste_id == 89
+					).length,
+					vaishya: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.caste_id == 90
+					).length,
+					reddy: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.caste_id == 91
+					).length,
+					raju: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.caste_id == 92
+					).length,
+					kamma: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.caste_id == 96
+					).length,
+					kapu: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.caste_id == 97
+					).length,
+					komati: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.caste_id == 98
+					).length,
+					velama: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.caste_id == 99
+					).length,
+					sc: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.caste_id == 100
+					).length,
+					st: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.caste_id == 101
+					).length,
+					others: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.caste_id == 102
 					).length,
 				},
 				registrations: {

@@ -199,12 +199,21 @@ async function getAllWithJoinAndWhere(req, res) {
       age,
     } = req.body;
 
-    // const [age1, age2] = age.split("-");
-    // const pasedAge1 = parseInt(age1);
-    // const pasedAge2 = parseInt(age2);
+    let age_min = 0;
+    let age_max = 100;
+
+  if (age == "80+"){
+    age_min = 80;
+    age_max = 1000;
+  }  
+  else if (age != ""){  
+    const [age1, age2] = age.split("-");
+    age_min = parseInt(age1);
+    age_max = parseInt(age2);
+  }
 
     const result = await sequelize.query(
-      `CALL GetVotersList5(${mandal_id}, ${division_id},${sachivalayam_id},${part_no},${village_id}, ${gender}, ${religion_id}, ${caste_id}, ${disability}, ${govt_employee}, ${limit}, ${page}, NULL, NULL)
+      `CALL GetVotersList6(${district_id}, ${consistency_id}, ${mandal_id}, ${division_id},${sachivalayam_id},${part_no},${village_id}, ${gender}, ${religion_id}, ${caste_id}, ${disability}, ${govt_employee}, ${age_min}, ${age_max}, ${limit}, ${page}, NULL, NULL)
     	`
     );
 

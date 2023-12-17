@@ -144,7 +144,7 @@ async function updateTicketStatus(req, res) {
   }
 }
 
-async function getAllWithJoinAndWhere(req, res) {
+async function getAllTicketsWithJoinAndWhere(req, res) {
   const page = parseInt(req.query.page || 1);
   const limit = parseInt(req.query.limit || 50);
   //const offset = (page - 1) * limit;
@@ -153,15 +153,41 @@ async function getAllWithJoinAndWhere(req, res) {
 
     //dropdownFilters
     const {
-      voter_pk,
-      volunteer_id,
-      navaratnalu_id,
-      status_id,
-      reason,
+      district_id,
+      consistency_id,
+      mandal_id,
+      division_id,
+      sachivalayam_id,
+      part_no,
+      village_id,
+      gender,
+      religion_id,
+      caste_id,
+      disability,
+      govt_employee,
+      age,
+      // voter_pk,
+      // volunteer_id,
+      // navaratnalu_id,
+      // status_id,
+      // reason,
     } = req.body;
 
+    let age_min = 0;
+    let age_max = 100;
+
+    if (age == "80+"){
+      age_min = 80;
+      age_max = 1000;
+    }  
+    else if (age != ""){  
+      const [age1, age2] = age.split("-");
+      age_min = parseInt(age1);
+      age_max = parseInt(age2);
+    }
+
     const result = await sequelize.query(
-      `CALL GetTicketList(${voter_pk}, ${volunteer_id},${navaratnalu_id},${status_id},${reason}, ${limit}, ${page}, NULL, NULL)
+      `CALL GetTicketsList(${district_id}, ${consistency_id}, ${mandal_id}, ${division_id},${sachivalayam_id},${part_no},${village_id}, ${gender}, ${religion_id}, ${caste_id}, ${disability}, ${govt_employee}, ${age_min}, ${age_max}, ${limit}, ${page}, 'ticket_master_pk', 'DESC')
 			`
     );
 
@@ -336,7 +362,7 @@ async function ticketResolved (req, res){
     if (!data)
       return res
         .status(404)
-        .json({ error: `id: ${req.params.id} was not found` });
+        .json({ error: `id: ${ticket_master_pk} was not found` });
     var query = `
     update ticket_master
     set is_open = 0
@@ -354,6 +380,23 @@ async function ticketResolved (req, res){
   }
 }
 
+async function getAllTicketsByVoterId(req, res){
+  try {
+    const { Ticket_master } = await connectToDatabase(); 
+    const { voter_pk } = req.body; 
+    const data = await Ticket_master.findAll({
+      where: {
+        voter_pk: voter_pk,
+      },
+    });
+    return res.status(200).json({ message: data });
+  }
+  catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+
+}
+
 
 module.exports = {
   getById,
@@ -363,7 +406,8 @@ module.exports = {
   deletedById,
   getAllWithJoin,
   updateTicketStatus,
-  getAllWithJoinAndWhere,
+  getAllTicketsWithJoinAndWhere,
   createTicketInTicketMasterAndTicketHistory,
   ticketResolved,
+  getAllTicketsByVoterId,
 };

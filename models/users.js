@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
 			district_id: DataTypes.INTEGER,
 			part_no: DataTypes.INTEGER,
 			is_first_login: DataTypes.BOOLEAN,
+			otp: DataTypes.INTEGER,
 		},
 		{
 			tableName: 'users',
