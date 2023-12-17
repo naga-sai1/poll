@@ -351,11 +351,14 @@ async function getOpininoPollDashboardByJoinWhere(req, res) {
     left join poll_survey ps on
         v.voter_pk = ps.voter_pk
 
-		left join states s on
+	left join states s on
         v.state_id = s.state_pk
 
-		left join districts d on
+	left join districts d on
         v.district_id = d.district_pk
+
+	left join ticket_master tm on
+		v.voter_pk = tm.voter_pk
 
     left join constituencies c on 
        v.consistency_id = c.consistency_pk  
@@ -653,6 +656,105 @@ async function getOpininoPollDashboardByJoinWhere(req, res) {
 						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.caste_id == 102
 					).length,
 				},
+				ticket_status: {
+					open: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 1
+					).length,
+					resolved: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 2
+					).length,
+					cancelled: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 3
+					).length,
+					escalated: data.filter(
+						(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 4
+					).length,
+				},
+				// ticket_bar_chart: {
+				// 	pakala:{
+				// 		open: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 1 && item.mandal_id == 3
+				// 		).length,
+				// 		resolved: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 2 && item.mandal_id == 3
+				// 		).length,
+				// 		cancelled: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 3 && item.mandal_id == 3
+				// 		).length,
+				// 		escalated: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 4 && item.mandal_id == 3
+				// 		).length,
+				// 	},
+				// 	chandragiri:{
+				// 		open: data.filter(
+				// 			(item) => item.status_id == 1
+				// 		).length,
+				// 		resolved: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 2 && item.mandal_id == 2
+				// 		).length,
+				// 		cancelled: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 3 && item.mandal_id == 2
+				// 		).length,
+				// 		escalated: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 4 && item.mandal_id == 2
+				// 		).length,
+				// 	},
+				// 	ramachandrapuram:{
+				// 		open: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 1 && item.mandal_id == 4
+				// 		).length,
+				// 		resolved: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 2 && item.mandal_id == 4
+				// 		).length,
+				// 		cancelled: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 3 && item.mandal_id == 4
+				// 		).length,
+				// 		escalated: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 4 && item.mandal_id == 4
+				// 		).length,
+				// 	},
+				// 	chinnagotigallu:{
+				// 		open: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 1 && item.mandal_id == 5
+				// 		).length,
+				// 		resolved: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 2 && item.mandal_id == 5
+				// 		).length,
+				// 		cancelled: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 3 && item.mandal_id == 5
+				// 		).length,
+				// 		escalated: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 4 && item.mandal_id == 5
+				// 		).length,
+				// 	},
+				// 	yerravaripalem:{
+				// 		open: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 1 && item.mandal_id == 6
+				// 		).length,
+				// 		resolved: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 2 && item.mandal_id == 6
+				// 		).length,
+				// 		cancelled: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 3 && item.mandal_id == 6
+				// 		).length,
+				// 		escalated: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 4 && item.mandal_id == 6
+				// 		).length,
+				// 	},tirupati:{
+				// 		open: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 1 && item.mandal_id == 8
+				// 		).length,
+				// 		resolved: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 2 && item.mandal_id == 8
+				// 		).length,
+				// 		cancelled: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 3 && item.mandal_id == 8
+				// 		).length,
+				// 		escalated: data.filter(
+				// 			(item) => item.is_newregistration == 0 && item.intrested_party !== null && item.status_id == 4 && item.mandal_id == 8
+				// 		).length,
+				// 	},
+				// 	},
 				registrations: {
 					new: newVoterRegistration,
 					pending: newVoterRegistration,

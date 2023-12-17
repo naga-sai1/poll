@@ -1,0 +1,69 @@
+CREATE DEFINER=`u276789778_polling_survey`@`%` PROCEDURE `GetUsersList4`(
+    IN p_DistId INT,
+    IN p_ConsId INT,
+    IN p_MandId INT,
+    IN p_DivId INT,
+    IN p_SachiId INT,
+    IN p_PartNo INT,
+    IN p_VillNo INT,
+    IN p_DesigId INT,
+    IN p_results_per_page INT, 
+    IN p_pagenumber INT, 
+    IN p_sort_column VARCHAR(100), 
+    IN p_sort_dir VARCHAR(5)
+)
+BEGIN
+
+    DECLARE p_pagination_offset INT;
+    
+    SET @p_results_per_page = IFNULL(p_results_per_page, 50);
+    SET @p_pagenumber = IFNULL(p_pagenumber, 1);
+
+    IF p_pagenumber <= 0 THEN
+        SET @p_pagenumber = 1;
+    END IF;
+
+    -- Calculate pagination offset
+    SET @p_pagination_offset = @p_results_per_page * (@p_pagenumber - 1);
+
+    SET @p_sort_column = IF (NULLIF(p_sort_column, '') IS NULL, 'username', p_sort_column);
+    SET @p_sort_dir = IF (NULLIF(p_sort_dir, '') IS NULL, 'DESC', p_sort_dir);
+
+
+    SET @SqlQuery = CONCAT(
+        'SELECT *,
+            GROUP_CONCAT(um.part_no) AS parts,
+            u.part_no as part_no,
+            l.lookup_pk  as designation_id,
+            l.lookup_valuename as designation_name,
+            u.division_id as division_pkk
+
+            FROM 
+                users u        
+            LEFT JOIN 
+                user_mapping um ON u.user_pk = um.user_id
+            LEFT JOIN
+                lookup l on  l.lookup_pk = u.designation_id
+            LEFT JOIN 
+                parts p on u.part_no = p.part_no
+            LEFT JOIN
+                villages v on u.village_id = v.village_pk
+            WHERE
+                u.state_id = 5 ',
+        IF(p_DistId IS NOT NULL, CONCAT(' AND u.district_id = ',p_DistId), ''),
+		IF(p_ConsId IS NOT NULL, CONCAT(' AND u.consistency_id = ',p_ConsId), ''),
+        IF(p_MandId IS NOT NULL, CONCAT(' AND u.mandal_id = ',p_MandId), ''),
+        IF(p_DivId IS NOT NULL, CONCAT(' AND u.division_id = ',p_DivId), ''),
+        IF(p_SachiId IS NOT NULL, CONCAT(' AND u.sachivalayam_id = ',p_SachiId), ''),
+        IF(p_PartNo IS NOT NULL, CONCAT(' AND u.part_no = ',p_PartNo), ''),
+        IF(p_DesigId IS NOT NULL, CONCAT(' AND u.designation_id = ',p_DesigId), ''),
+        IF(p_VillNo IS NOT NULL, CONCAT(' AND u.village_id = ',p_VillNo), ''),
+        ' Group By u.user_pk ORDER BY ', @p_sort_column, ' ', @p_sort_dir, '
+        LIMIT ?, ?'
+    );    
+
+    -- Prepare and execute the dynamic SQL query using placeholders
+    PREPARE dynamic_statement FROM @SqlQuery;
+    EXECUTE dynamic_statement USING @p_pagination_offset, @p_results_per_page;
+    DEALLOCATE PREPARE dynamic_statement;
+END
