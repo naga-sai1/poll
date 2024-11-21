@@ -32,9 +32,9 @@ const sequelize = new Sequelize('u276789778_polling_survey', 'u276789778_polling
 	logging: false,
 });
 
-// const sequelize = new Sequelize('AppPollSurvey', 'admin', 'admin1234', {
+// const sequelize = new Sequelize('ApPollSurveyDev', 'admin', 'admin1234', {
 // 	dialect: 'mysql',
-// 	host: 'apppollsurveydev.cligvr4maf1p.us-east-1.rds.amazonaws.com',
+// 	host: 'appollsurveydev.cligvr4maf1p.us-east-1.rds.amazonaws.com',
 // 	port: 3306,
 // 	//logging: true,
 // 	logging: false,
